@@ -15,12 +15,6 @@ Below for the three accessoryType enables customization.
 
 ## Installation ##
 
-\- CocoaPods
-
-    platform :ios
-    pod 'MSCellAccessory'
-\- Just as easily
-
 Drag the included <b>MSCellAccessory</b> folder into your project.
 
 ## Usage ##
