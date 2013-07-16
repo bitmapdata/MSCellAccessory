@@ -5,7 +5,7 @@ MSCellAccessory
 [![Platform](http://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)](http://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)
 
 
-MSCellAccessory is a UITableViewCell accessoryType can easily customize the colors. Many developer really want to customizing accessorytype color. but, they using a customized png image are solved. but this method is not good. because Unnecessary to create an image file, and each would have to create all colors. and Loading it unnecessarily increases the capacity of the memory. If using a this library is more easily customizing accessoryType and more flexible via Programmatically. iOS7 also will support.
+MSCellAccessory is a UITableViewCell accessoryType can easily customize the colors. Many developer really want to customizing UITableViewCell accessoryType color. but, they using a customized png image are solved. but this method is not good. because Unnecessary to create an image file, and each would have to create all colors. and Loading it unnecessarily increases the capacity of the memory. If using a this library is more easily customizing accessoryType and more flexible via Programmatically. iOS7 also will support.
 
 Below for the three accessoryType enables customization.
 
