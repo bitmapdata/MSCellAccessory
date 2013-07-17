@@ -13,7 +13,7 @@ Below for the three accessoryType enables customization. and more one thing is T
  
     DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator / default colors (127,127,127)
  
-    CHECKMARK: identical to UITableViewCellAccessoryCheckmark colors               / default colors (50, 79, 133)
+    CHECKMARK: identical to UITableViewCellAccessoryCheckmark                      / default colors (50, 79, 133)
  
     TOGGLE_INDICATOR: UIControl has a selected property. If the selected property is set to true, shape is V-shaped, 
                       set to false vice versa V-shaped.
