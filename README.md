@@ -7,11 +7,20 @@ MSCellAccessory
 
 MSCellAccessory is a UITableViewCell accessoryType can easily customize the colors. Many developer really want to customizing UITableViewCell accessoryType color. but, they using a customized png image are solved. but this method is not good. because Unnecessary to create an image file, and each would have to create all colors. and Loading it unnecessarily increases the capacity of the memory. If using a this library is more easily customizing accessoryType and more flexible via Programmatically. iOS7 also will support.
 
-Below for the three accessoryType enables customization.
+Below for the three accessoryType enables customization. and more one thing is TOGGLE_INDICATOR.
 
-    UITableViewCellAccessoryDetailDisclosureButton <=> DETAIL_DISCLOSURE
-    UITableViewCellAccessoryDisclosureIndicator <=> DISCLOSURE_INDICATOR
-    UITableViewCellAccessoryCheckmark <=> CHECKMARK
+    DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton / default colors (35,110,216)
+ 
+    DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator / default colors (127,127,127)
+ 
+    CHECKMARK: identical to UITableViewCellAccessoryCheckmark colors               / default colors (50, 79, 133)
+ 
+    TOGGLE_INDICATOR: UIControl has a selected property. If the selected property is set to true, shape is V-shaped, 
+                      set to false vice versa V-shaped.
+    - Access as follows:
+        MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
+        acc.selected = true;
+
 
 <p align="center" >
 <img src="https://raw.github.com/bitmapdata/MSCellAccessory/master/MSCellAccessoryDemo/ScreenShot.png">
