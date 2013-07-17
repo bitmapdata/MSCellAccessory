@@ -38,16 +38,32 @@
 //
 
 #import <UIKit/UIKit.h>
-
+/*
+ 
+ DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton / default colors (35,110,216)
+ 
+ DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator / default colors (127,127,127)
+ 
+ CHECKMARK: identical to UITableViewCellAccessoryCheckmark colors               / default colors (50, 79, 133)
+ 
+ TOGGLE_INDICATOR: UIControl has a selected property. If the selected property is set to true, shape is V-shaped, set to false vice versa V-shaped.
+ 
+    - Access as follows:
+ 
+        MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
+        acc.selected = true;
+*/
 typedef enum
 {
-    DISCLOSURE_INDICATOR,
     DETAIL_DISCLOSURE,
-    CHECKMARK
+    DISCLOSURE_INDICATOR,
+    CHECKMARK,
+    TOGGLE_INDICATOR
 }AccessoryType;
 
 @interface MSCellAccessory : UIControl
 
 + (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color;
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor;
 
 @end
