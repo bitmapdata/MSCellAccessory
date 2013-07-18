@@ -25,12 +25,12 @@ Below for the three accessoryType enables customization. and more one thing is T
 
 ## Installation ##
 
-MSCellAccessory is possible via CocoaPods. Just add the following to your Podfile. // #import <MSCellAccessory.h>
+MSCellAccessory is possible via CocoaPods. Just add the following to your Podfile.  `#import <MSCellAccessory.h>`
 
     platform :ios
     pod 'MSCellAccessory'
 
-Another way to, drag the included <b>MSCellAccessory</b> folder into your project. // #import "MSCellAccessory.h"
+Another way to, drag the included <b>MSCellAccessory</b> folder into your project.  `#import "MSCellAccessory.h"`
 
 ## Usage ##
 
