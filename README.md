@@ -1,8 +1,8 @@
 MSCellAccessory
 ============
 
-[![Version](http://cocoapod-badges.herokuapp.com/v/MSCellAccessory/badge.png)](http://cocoapod-badges.herokuapp.com/v/MSCellAccessory/badge.png)
-[![Platform](http://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)](http://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)
+[![Version](https://cocoapod-badges.herokuapp.com/v/MSCellAccessory/badge.png)](https://cocoapod-badges.herokuapp.com/v/MSCellAccessory/badge.png)
+[![Platform](https://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)](https://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)
 
 
 MSCellAccessory is a UITableViewCell accessoryType can easily customize the colors. Many developer really want to customizing UITableViewCell accessoryType color. but, they using a customized png image are solved. but this method is not good. because Unnecessary to create an image file, and each would have to create all colors. and Loading it unnecessarily increases the capacity of the memory. If using a this library is more easily customizing accessoryType and more flexible via Programmatically. iOS7 also will support.
@@ -15,11 +15,8 @@ Below for the three accessoryType enables customization. and more one thing is T
  
     CHECKMARK: identical to UITableViewCellAccessoryCheckmark                      / default colors (50, 79, 133)
  
-    TOGGLE_INDICATOR: UIControl has a selected property. If the selected property is set to true, shape is V-shaped, 
-                      set to false vice versa V-shaped.
-    - Access as follows:
-        MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
-        acc.selected = true;
+    TOGGLE_INDICATOR: MSCellAccessory has a "selected" property(inherited UIControl). 
+                      If the selected property is set to true, shape is V-shaped, set to false vice versa V-shaped.
 
 
 <p align="center" >
@@ -28,12 +25,12 @@ Below for the three accessoryType enables customization. and more one thing is T
 
 ## Installation ##
 
-MSCellAccessory is possible via CocoaPods. Just add the following to your Podfile.
+MSCellAccessory is possible via CocoaPods. Just add the following to your Podfile. // #import <MSCellAccessory.h>
 
     platform :ios
     pod 'MSCellAccessory'
 
-Another way to, drag the included <b>MSCellAccessory</b> folder into your project.
+Another way to, drag the included <b>MSCellAccessory</b> folder into your project. // #import "MSCellAccessory.h"
 
 ## Usage ##
 
@@ -43,7 +40,7 @@ These classes was written under the ARC. Be sure to specify `-fobjc-arc` the 'Co
 
 ## Sample Code ##
 
-    "#import "MSCellAccessory.h"
+    #import "MSCellAccessory.h"
 
     - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
     {
@@ -64,7 +61,19 @@ These classes was written under the ARC. Be sure to specify `-fobjc-arc` the 'Co
         {
             cell.accessoryView = [MSCellAccessory accessoryWithType:CHECKMARK color:[UIColor colorWithRed:0/255.0 green:166/255.0 blue:149/255.0 alpha:1.0]];
         }
-        
+        else if(indexPath.row == 3)
+        {
+            cell.accessoryView = [MSCellAccessory accessoryWithType:CHECKMARK color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
+            MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
+            acc.selected = true;
+        }
+        else if(indexPath.row == 4)
+        {
+            cell.accessoryView = [MSCellAccessory accessoryWithType:CHECKMARK color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
+            MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
+            acc.selected = false;
+        }
+
         return cell;
     }
 
