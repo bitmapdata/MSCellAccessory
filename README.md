@@ -5,32 +5,52 @@ MSCellAccessory
 [![Platform](https://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)](https://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)
 
 
-MSCellAccessory is a UITableViewCell accessoryType can easily customize the colors. Many developer really want to customizing UITableViewCell accessoryType color. but, they using a customized png image are solved. but this method is not good. because Unnecessary to create an image file, and each would have to create all colors. and Loading it unnecessarily increases the capacity of the memory. If using a this library is more easily customizing accessoryType and more flexible via Programmatically. iOS7 also will support.
+MSCellAccessory is a UITableViewCell accessoryType can easily customize the colors. Many developer really want to customizing UITableViewCell accessoryType color. but, they using a customized png image are solved. but this method is not good. because Unnecessary to create an image file, and each would have to create all colors. and Loading it unnecessarily increases the capacity of the memory. If using a this library is more easily customizing accessoryType and more flexible via Programmatically.
 
-Below for the three accessoryType enables customization. and more one thing is TOGGLE_INDICATOR.
 
-    DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton / default colors (35,110,216)
+#### Prior to iOS7
  
-    DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator / default colors (127,127,127)
+    DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton
  
-    CHECKMARK: identical to UITableViewCellAccessoryCheckmark                      / default colors (50, 79, 133)
+    DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator
  
-    TOGGLE_INDICATOR: MSCellAccessory has a "selected" property(inherited UIControl). 
-                      If the selected property is set to true, shape is V-shaped, set to false vice versa V-shaped.
+    CHECKMARK: identical to UITableViewCellAccessoryCheckmark
+ 
+    TOGGLE_INDICATOR: Is used in the unfold / fold implementation like menu list. depending on the selected value will be changed automatically.
+    
+    If you set a accessoryView type TOGGLE_INDICATOR and want to change selected value. access as follows:
+        
+    MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
+    acc.selected = false; // V-shaped.
+    acc.selected = true;  // Vice versa shaped.
+ 
+#### iOS7 Flat Design
+ 
+    FLAT_DETAIL_DISCLOSURE: identical to iOS7 UITableViewCellAccessoryDetailDisclosureButton
+ 
+    FLAT_DETAIL_BUTTON: identical to iOS7 UITableViewCellAccessoryDetailButton
+ 
+    FLAT_DISCLOSURE_INDICATOR: identical to iOS7 UITableViewCellAccessoryDisclosureIndicator
+ 
+    FLAT_CHECKMARK: identical to iOS7 UITableViewCellAccessoryCheckmark
+ 
+    FLAT_TOGGLE_INDICATOR: Flat TOGGLE_INDICATOR, Same as above.
 
-
+<p align="center" >
+<img src="https://raw.github.com/bitmapdata/MSCellAccessory/master/MSCellAccessoryDemo/ScreenShot2.png">
+</p>
 <p align="center" >
 <img src="https://raw.github.com/bitmapdata/MSCellAccessory/master/MSCellAccessoryDemo/ScreenShot.png">
 </p>
 
 ## Installation ##
 
-MSCellAccessory is possible via CocoaPods. Just add the following to your Podfile.  `#import <MSCellAccessory.h>`
+MSCellAccessory is possible via CocoaPods. Just add the following to your Podfile. => `#import <MSCellAccessory.h>`
 
     platform :ios
     pod 'MSCellAccessory'
 
-Another way to, drag the included <b>MSCellAccessory</b> folder into your project.  `#import "MSCellAccessory.h"`
+Another way to, drag the included <b>MSCellAccessory</b> folder into your project. => `#import "MSCellAccessory.h"`
 
 ## Usage ##
 
@@ -51,32 +71,39 @@ These classes was written under the ARC. Be sure to specify `-fobjc-arc` the 'Co
         
         if(indexPath.row == 0)
         {
-            cell.accessoryView = [MSCellAccessory accessoryWithType:DETAIL_DISCLOSURE color:[UIColor colorWithRed:253/255.0 green:184/255.0 blue:0/255.0 alpha:1.0]];
+            cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_DETAIL_DISCLOSURE colors:@[[UIColor colorWithRed:253/255.0 green:184/255.0 blue:0/255.0 alpha:1.0], [UIColor colorWithWhite:0.5 alpha:1.0]]];
         }
         else if(indexPath.row == 1)
         {
-            cell.accessoryView = [MSCellAccessory accessoryWithType:DISCLOSURE_INDICATOR color:[UIColor colorWithRed:132/255.0 green:100/255.0 blue:159/255.0 alpha:1.0]];
+            cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_DETAIL_BUTTON color:[UIColor colorWithRed:132/255.0 green:100/255.0 blue:159/255.0 alpha:1.0]];
         }
         else if(indexPath.row == 2)
         {
-            cell.accessoryView = [MSCellAccessory accessoryWithType:CHECKMARK color:[UIColor colorWithRed:0/255.0 green:166/255.0 blue:149/255.0 alpha:1.0]];
+            cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_DISCLOSURE_INDICATOR color:[UIColor colorWithRed:0/255.0 green:166/255.0 blue:149/255.0 alpha:1.0]];
         }
         else if(indexPath.row == 3)
         {
-            cell.accessoryView = [MSCellAccessory accessoryWithType:CHECKMARK color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
-            MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
-            acc.selected = true;
+            cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_CHECKMARK color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
         }
         else if(indexPath.row == 4)
         {
-            cell.accessoryView = [MSCellAccessory accessoryWithType:CHECKMARK color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
-            MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
-            acc.selected = false;
+            cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_TOGGLE_INDICATOR color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
         }
 
         return cell;
     }
 
+### Release notes
+
+####    Ver 1.1.0
+* Supported iOS7 Flat Design.
+    
+####    Ver 1.0.1   
+* Bug fixed.
+* Modified more similar to the shape of the accessoryType.
+    
+####    Ver 1.0.0 
+* Initial commit
 
 ## License ##
 
