@@ -38,32 +38,65 @@
 //
 
 #import <UIKit/UIKit.h>
+
 /*
+ *** Prior to iOS7
  
- DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton / default colors (35,110,216)
+ DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton
  
- DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator / default colors (127,127,127)
+ DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator
  
- CHECKMARK: identical to UITableViewCellAccessoryCheckmark colors               / default colors (50, 79, 133)
+ CHECKMARK: identical to UITableViewCellAccessoryCheckmark
  
- TOGGLE_INDICATOR: UIControl has a selected property. If the selected property is set to true, shape is V-shaped, set to false vice versa V-shaped.
+ TOGGLE_INDICATOR: Is used in the unfold / fold implementation like menu list. depending on the selected value will be changed automatically.
  
     - Access as follows:
- 
         MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
-        acc.selected = true;
+        acc.selected = false; // V-shaped.
+        acc.selected = true;  // Vice versa shaped.
+ 
+ ------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ *** iOS7 Flat Design
+ 
+ FLAT_DETAIL_DISCLOSURE: identical to iOS7 UITableViewCellAccessoryDetailDisclosureButton
+ 
+ FLAT_DETAIL_BUTTON: identical to iOS7 UITableViewCellAccessoryDetailButton
+ 
+ FLAT_DISCLOSURE_INDICATOR: identical to iOS7 UITableViewCellAccessoryDisclosureIndicator
+ 
+ FLAT_CHECKMARK: identical to iOS7 UITableViewCellAccessoryCheckmark
+ 
+ FLAT_TOGGLE_INDICATOR: Flat TOGGLE_INDICATOR
 */
+
+#define DETAIL_DISCLOSURE_DEFAULT_COLOR             [UIColor colorWithRed:35/255.0 green:110/255.0 blue:216/255.0 alpha:1.0]
+#define DISCLOSURE_INDICATOR_DEFAULT_COLOR          [UIColor colorWithRed:127/255.0 green:127/255.0 blue:127/255.0 alpha:1.0]
+#define CHECKMARK_DEFAULT_DEFAULT_COLOR             [UIColor colorWithRed:50/255.0 green:79/255.0 blue:133/255.0 alpha:1.0]
+#define FLAT_DETAIL_BUTTON_DEFAULT_COLOR            [UIColor colorWithRed:0/255.0 green:122/255.0 blue:255/255.0 alpha:1.0]
+#define FLAT_DISCLOSURE_INDICATOR_DEFAULT_COLOR     [UIColor colorWithRed:199/255.0 green:199/255.0 blue:204/255.0 alpha:1.0]
+#define FLAT_CHECKMARK_DEFAULT_COLOR                [UIColor colorWithRed:0/255.0 green:122/255.0 blue:255/255.0 alpha:1.0]
+
 typedef enum
 {
     DETAIL_DISCLOSURE,
     DISCLOSURE_INDICATOR,
     CHECKMARK,
-    TOGGLE_INDICATOR
+    TOGGLE_INDICATOR,
+    FLAT_DETAIL_DISCLOSURE,
+    FLAT_DETAIL_BUTTON,
+    FLAT_DISCLOSURE_INDICATOR,
+    FLAT_CHECKMARK,
+    FLAT_TOGGLE_INDICATOR
 }AccessoryType;
 
 @interface MSCellAccessory : UIControl
 
 + (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color;
 + (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor;
+
+// If you using a FLAT_DETAIL_DISCLOSURE, use these method. because FLAT_DETAIL_DISCLOSURE has a two different UI (FLAT_DETAIL_BUTTON, FLAT_DISCLOSURE_INDICATOR), must set a each color.
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType colors:(NSArray *)colors;
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors;
 
 @end
