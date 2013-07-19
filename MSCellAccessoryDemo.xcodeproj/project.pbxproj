@@ -20,6 +20,7 @@
 		EE12A34C17897E6F00DC5124 /* TBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE12A34917897E6F00DC5124 /* TBViewController.m */; };
 		EE12A34D17897E6F00DC5124 /* TBViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE12A34A17897E6F00DC5124 /* TBViewController.xib */; };
 		EE12A3571789BC7000DC5124 /* ScreenShot.png in Resources */ = {isa = PBXBuildFile; fileRef = EE12A3561789BC6F00DC5124 /* ScreenShot.png */; };
+		EEAE19001798E21C001ED37E /* ScreenShot2.png in Resources */ = {isa = PBXBuildFile; fileRef = EEAE18FF1798E21C001ED37E /* ScreenShot2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		EE12A34917897E6F00DC5124 /* TBViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBViewController.m; sourceTree = "<group>"; };
 		EE12A34A17897E6F00DC5124 /* TBViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TBViewController.xib; sourceTree = "<group>"; };
 		EE12A3561789BC6F00DC5124 /* ScreenShot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ScreenShot.png; sourceTree = "<group>"; };
+		EEAE18FF1798E21C001ED37E /* ScreenShot2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ScreenShot2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				EE12A33317896E2F00DC5124 /* Default@2x.png */,
 				EE12A33517896E2F00DC5124 /* Default-568h@2x.png */,
 				EE12A3561789BC6F00DC5124 /* ScreenShot.png */,
+				EEAE18FF1798E21C001ED37E /* ScreenShot2.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEAE19001798E21C001ED37E /* ScreenShot2.png in Resources */,
 				EE12A32A17896E2F00DC5124 /* InfoPlist.strings in Resources */,
 				EE12A33217896E2F00DC5124 /* Default.png in Resources */,
 				EE12A33417896E2F00DC5124 /* Default@2x.png in Resources */,
@@ -270,11 +274,13 @@
 		EE12A34017896E2F00DC5124 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MSCellAccessoryDemo/MSCellAccessoryDemo-Prefix.pch";
 				INFOPLIST_FILE = "MSCellAccessoryDemo/MSCellAccessoryDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -282,11 +288,13 @@
 		EE12A34117896E2F00DC5124 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MSCellAccessoryDemo/MSCellAccessoryDemo-Prefix.pch";
 				INFOPLIST_FILE = "MSCellAccessoryDemo/MSCellAccessoryDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
