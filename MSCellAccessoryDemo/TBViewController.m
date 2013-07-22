@@ -53,12 +53,16 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     
     cell.textLabel.font = [UIFont systemFontOfSize:10.0];
-    
     [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DETAIL_DISCLOSURE];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DETAIL_BUTTON];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DISCLOSURE_INDICATOR];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_CHECKMARK];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_TOGGLE_INDICATOR];
+//    [self configureCell:cell indexPath:indexPath accessoryType:DETAIL_DISCLOSURE];
+//    [self configureCell:cell indexPath:indexPath accessoryType:DISCLOSURE_INDICATOR];
+//    [self configureCell:cell indexPath:indexPath accessoryType:CHECKMARK];
+//    [self configureCell:cell indexPath:indexPath accessoryType:TOGGLE_INDICATOR];
+
     
     return cell;
 }
@@ -171,6 +175,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    MSCellAccessory *acc = (MSCellAccessory *)[tableView cellForRowAtIndexPath:indexPath].accessoryView;
+
+    NSLog(@"didSelectRowAtIndexPath:%@ type:%d", indexPath, acc.type);
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    MSCellAccessory *acc = (MSCellAccessory *)[tableView cellForRowAtIndexPath:indexPath].accessoryView;
+    
+    NSLog(@"accessoryButtonTappedForRowWithIndexPath:%@, type:%d", indexPath, acc.type);
 }
 
 @end
