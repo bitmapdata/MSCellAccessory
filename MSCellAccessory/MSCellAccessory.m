@@ -7,16 +7,18 @@
 //
 
 #import "MSCellAccessory.h"
+#import "UIView+AccessViewController.h"
 
 #define kAccessoryViewRect              CGRectMake(0, 0, 32.0, 32.0)
 
-#define kCircleRect                     CGRectMake(5.5, 3.5, 22.0, 22.0)
-#define kCircleOverlayRect              CGRectMake(3.5, 14.5, 23.0, 23.0)
+#define kCircleRect                     CGRectMake(6.0, 3.5, 21.0, 21.0)
+#define kCircleOverlayRect              CGRectMake(4.0, 12.5, 26.0, 21.5)
+#define kCircleShadowOverlayRect        CGRectMake(6.0, 3.0, 20.9, 22)
 #define kStrokeWidth                    2.0
-#define kShadowRadius                   4.6
-#define kShadowOffset                   CGSizeMake(.08, .52)
+#define kShadowRadius                   4.0
+#define kShadowOffset                   CGSizeMake(0.1, 1.0)
 #define kShadowColor                    [UIColor colorWithWhite:.0 alpha:1.]
-#define kDetailDisclosurePositon        CGPointMake(20.0, 14.5)
+#define kDetailDisclosurePositon        CGPointMake(20.0, 14.0)
 #define kDetailDisclosureRadius         5.5
 #define kHighlightedColorGapH           9.0/360.0
 #define kHighlightedColorGapS           9.5/100.0
@@ -92,7 +94,7 @@
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
-    if(_type == FLAT_DETAIL_BUTTON)
+    if(_type == FLAT_DETAIL_BUTTON || _type == DETAIL_DISCLOSURE)
     {
         if(point.x > 0)
             return YES;
@@ -143,7 +145,10 @@
         
         self.userInteractionEnabled = NO;
         if(_type == DETAIL_DISCLOSURE || _type == FLAT_DETAIL_BUTTON)
+        {
+            [self addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
             self.userInteractionEnabled = YES;
+        }
     }
     
     return self;
@@ -166,9 +171,37 @@
         {
             self.highlightedColors = highlightedColors;
         }
+        
+        [self addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return self;
+}
+
+- (void)accessoryButtonTapped:(id)sender event:(UIEvent *)event
+{
+    UITableView *superTableView = NULL;
+    UITableViewController *superController = NULL;
+    UITableViewCell *superTableViewCell = NULL;
+    NSIndexPath *indexPath = NULL;
+    //iOS7 above
+    if([NSClassFromString(@"UIMotionEffect") class])
+    {
+        superTableView = (UITableView *)self.superview.superview.superview;
+        superController = (UITableViewController *)superTableView.viewController;
+        superTableViewCell = (UITableViewCell *)self.superview.superview;
+        indexPath = [superTableView indexPathForCell:superTableViewCell];
+    }
+    //iOS5, iOS6
+    else
+    {
+        superTableView = (UITableView *)self.superview.superview;
+        superController = (UITableViewController *)superTableView.viewController;
+        superTableViewCell = (UITableViewCell *)self.superview;
+        indexPath = [superTableView indexPathForCell:superTableViewCell];
+    }
+    
+    [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
 }
 
 + (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color
@@ -203,27 +236,34 @@
     if(_type == DETAIL_DISCLOSURE)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
-        UIBezierPath *markCircle = [UIBezierPath bezierPathWithOvalInRect:kCircleRect];
+        UIBezierPath *ddCircle = [UIBezierPath bezierPathWithOvalInRect:kCircleRect];
         
         CGContextSaveGState(ctx);
         {
-            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextAddEllipseInRect(ctx, kCircleShadowOverlayRect);
+            CGContextSetShadowWithColor(ctx, kShadowOffset, kShadowRadius, kShadowColor.CGColor );
+            CGContextDrawPath(ctx, kCGPathFill);
+        }
+        CGContextRestoreGState(ctx);
+
+        CGContextSaveGState(ctx);
+        {            
+            CGContextAddPath(ctx, ddCircle.CGPath);
             CGFloat h,s,v,a;
             UIColor *color = NULL;
             color = self.touchInside?_highlightedColor:_accessoryColor;
             [color getHue:&h saturation:&s brightness:&v alpha:&a];
             UIColor *overlayColor = [UIColor colorWithHue:h saturation:s+kOverlayColorGapS brightness:v+kOverlayColorGapV alpha:a];
             CGContextSetFillColorWithColor(ctx, overlayColor.CGColor);
-            CGContextSetShadowWithColor(ctx, kShadowOffset, kShadowRadius, kShadowColor.CGColor );
             CGContextDrawPath(ctx, kCGPathFill);
         }
         CGContextRestoreGState(ctx);
         
         CGContextSaveGState(ctx);
         {
-            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextAddPath(ctx, ddCircle.CGPath);
             CGContextClip(ctx);
-            CGContextAddRect(ctx, kCircleOverlayRect);
+            CGContextAddEllipseInRect(ctx, kCircleOverlayRect);
             CGContextSetFillColorWithColor(ctx, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
             CGContextDrawPath(ctx, kCGPathFill);
         }
@@ -231,7 +271,7 @@
         
         CGContextSaveGState(ctx);
         {
-            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextAddPath(ctx, ddCircle.CGPath);
             CGContextSetLineWidth(ctx, kStrokeWidth);
             CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
             CGContextDrawPath(ctx, kCGPathStroke);
