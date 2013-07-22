@@ -91,6 +91,7 @@ typedef enum
 }AccessoryType;
 
 @interface MSCellAccessory : UIControl
+@property (nonatomic, readonly) AccessoryType type;
 
 + (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color;
 + (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor;
