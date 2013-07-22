@@ -20,6 +20,7 @@
 		EE12A34C17897E6F00DC5124 /* TBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE12A34917897E6F00DC5124 /* TBViewController.m */; };
 		EE12A34D17897E6F00DC5124 /* TBViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE12A34A17897E6F00DC5124 /* TBViewController.xib */; };
 		EE12A3571789BC7000DC5124 /* ScreenShot.png in Resources */ = {isa = PBXBuildFile; fileRef = EE12A3561789BC6F00DC5124 /* ScreenShot.png */; };
+		EE1928D5179CE96C00675920 /* UIView+AccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE1928D4179CE96C00675920 /* UIView+AccessViewController.m */; };
 		EEAE19001798E21C001ED37E /* ScreenShot2.png in Resources */ = {isa = PBXBuildFile; fileRef = EEAE18FF1798E21C001ED37E /* ScreenShot2.png */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,8 @@
 		EE12A34917897E6F00DC5124 /* TBViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBViewController.m; sourceTree = "<group>"; };
 		EE12A34A17897E6F00DC5124 /* TBViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TBViewController.xib; sourceTree = "<group>"; };
 		EE12A3561789BC6F00DC5124 /* ScreenShot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ScreenShot.png; sourceTree = "<group>"; };
+		EE1928D3179CE96C00675920 /* UIView+AccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AccessViewController.h"; sourceTree = "<group>"; };
+		EE1928D4179CE96C00675920 /* UIView+AccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AccessViewController.m"; sourceTree = "<group>"; };
 		EEAE18FF1798E21C001ED37E /* ScreenShot2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ScreenShot2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,6 +123,8 @@
 		EE12A34217896EB500DC5124 /* MSCellAccessory */ = {
 			isa = PBXGroup;
 			children = (
+				EE1928D3179CE96C00675920 /* UIView+AccessViewController.h */,
+				EE1928D4179CE96C00675920 /* UIView+AccessViewController.m */,
 				EE12A34317896EB500DC5124 /* MSCellAccessory.h */,
 				EE12A34417896EB500DC5124 /* MSCellAccessory.m */,
 			);
@@ -195,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE12A32C17896E2F00DC5124 /* main.m in Sources */,
+				EE1928D5179CE96C00675920 /* UIView+AccessViewController.m in Sources */,
 				EE12A34517896EB500DC5124 /* MSCellAccessory.m in Sources */,
 				EE12A34B17897E6F00DC5124 /* AppDelegate.m in Sources */,
 				EE12A34C17897E6F00DC5124 /* TBViewController.m in Sources */,
