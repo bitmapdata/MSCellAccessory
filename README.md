@@ -95,6 +95,10 @@ These classes was written under the ARC. Be sure to specify `-fobjc-arc` the 'Co
 
 ### Release notes
 
+####    Ver 1.1.1
+* FLAT_DETAIL_BUTTON, FLAT_DETAIL_BUTTON, DETAIL_DISCLOSURE types auto linking to accessoryButtonTappedForRowWithIndexPath delegate.
+* DETAIL DISCLOSURE size and design modified.
+
 ####    Ver 1.1.0
 * Supported iOS7 Flat Design.
     
