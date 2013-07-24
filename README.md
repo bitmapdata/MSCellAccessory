@@ -5,8 +5,7 @@ MSCellAccessory
 [![Platform](https://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)](https://cocoapod-badges.herokuapp.com/p/MSCellAccessory/badge.png)
 
 
-MSCellAccessory is a UITableViewCell accessoryType can easily customize the colors. Many developer really want to customizing UITableViewCell accessoryType color. but, they using a customized png image are solved. but this method is not good. because Unnecessary to create an image file, and each would have to create all colors. and Loading it unnecessarily increases the capacity of the memory. If using a this library is more easily customizing accessoryType and more flexible via Programmatically.
-
+MSCellAccessory is a UITableViewCell accessoryType can easily customizing the colors. Many developer really want to customizing UITableViewCell accessoryType color. but, they using a customized png image are solved. but this method is not good. because Unnecessary to create an image file, and each would have to create all colors. and Loading it unnecessarily increases the capacity of the memory. If using a this library is more easily customizing accessoryType and more flexible via Programmatically.
 
 #### Prior to iOS7
  
@@ -93,11 +92,11 @@ These classes was written under the ARC. Be sure to specify `-fobjc-arc` the 'Co
         return cell;
     }
 
-### Release notes
+## Release notes ###
 
 ####    Ver 1.1.1
-* FLAT_DETAIL_BUTTON, FLAT_DETAIL_BUTTON, DETAIL_DISCLOSURE types auto linking to accessoryButtonTappedForRowWithIndexPath delegate.
-* DETAIL DISCLOSURE size and design modified.
+* FLAT_DETAIL_DISCLOSURE, FLAT_DETAIL_BUTTON, DETAIL_DISCLOSURE types auto linking to `- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath` delegate method. when such types accessory touched is called. same as Apple.
+* DETAIL_DISCLOSURE size and design modified. 
 
 ####    Ver 1.1.0
 * Supported iOS7 Flat Design.
