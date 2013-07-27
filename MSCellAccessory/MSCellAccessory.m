@@ -9,14 +9,17 @@
 #import "MSCellAccessory.h"
 #import "UIView+AccessViewController.h"
 
-#define kAccessoryViewRect              CGRectMake(0, 0, 32.0, 32.0)
+//if you change a UITableViewCell height, accessoryView this will affect change the right margin. so, the coordinates must be fixed. within layoutSubviews, drawRect. ( #issue prior to iOS7 )
+#define kFixedPositionX                 (self.superview.frame.size.width - 38)
+#define kFlatDetailFixedPositionX       (self.superview.frame.size.width - 58)
 
+#define kAccessoryViewRect              CGRectMake(0, 0, 32.0, 32.0)
 #define kCircleRect                     CGRectMake(6.0, 3.5, 21.0, 21.0)
-#define kCircleOverlayRect              CGRectMake(4.0, 12.5, 26.0, 21.5)
-#define kCircleShadowOverlayRect        CGRectMake(6.0, 3.0, 20.9, 22)
+#define kCircleOverlayRect              CGRectMake(2.0, 12.5, 29.0, 21.0)
+#define kCircleShadowOverlayRect        CGRectMake(6.0, 3.0, 21.0, 22.2)
 #define kStrokeWidth                    2.0
-#define kShadowRadius                   4.0
-#define kShadowOffset                   CGSizeMake(0.1, 1.0)
+#define kShadowRadius                   4.5
+#define kShadowOffset                   CGSizeMake(0.1, 1.2)
 #define kShadowColor                    [UIColor colorWithWhite:.0 alpha:1.]
 #define kDetailDisclosurePositon        CGPointMake(20.0, 14.0)
 #define kDetailDisclosureRadius         5.5
@@ -81,9 +84,7 @@
 #define FLAT_TOGGLE_INDICATOR_RADIUS                        5.0
 #define FLAT_TOGGLE_INDICATOR_LINE_WIDTH                    2.0
 
-
 @interface MSCellAccessory()
-@property (nonatomic, assign) AccessoryType type;
 @property (nonatomic, strong) UIColor *accessoryColor;
 @property (nonatomic, strong) UIColor *highlightedColor;
 @property (nonatomic, strong) NSArray *accessoryColors;
@@ -92,14 +93,44 @@
 
 @implementation MSCellAccessory
 
+#pragma mark - Factory
+
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color
+{
+    return [self accessoryWithType:accessoryType color:color highlightedColor:NULL];
+}
+
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor
+{
+    return [[MSCellAccessory alloc] initWithFrame:kAccessoryViewRect color:color highlightedColor:highlightedColor accessoryType:accessoryType];
+}
+
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType colors:(NSArray *)colors
+{
+    if(accessoryType != FLAT_DETAIL_DISCLOSURE)
+        return [self accessoryWithType:accessoryType color:colors[0]];
+    
+    return [self accessoryWithType:accessoryType colors:colors highlightedColors:NULL];
+}
+
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors
+{
+    if(accessoryType != FLAT_DETAIL_DISCLOSURE)
+        return [self accessoryWithType:accessoryType color:colors[0] highlightedColor:highlightedColors[0]];
+    
+    return [[MSCellAccessory alloc] initWithFrame:FLAT_ACCESSORY_VIEW_RECT colors:colors highlightedColors:highlightedColors accessoryType:accessoryType];
+}
+
+#pragma mark -
+
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
-    if(_type == FLAT_DETAIL_BUTTON || _type == DETAIL_DISCLOSURE)
+    if(_accType == FLAT_DETAIL_BUTTON || _accType == DETAIL_DISCLOSURE)
     {
         if(point.x > 0)
             return YES;
     }
-    else if(_type == FLAT_DETAIL_DISCLOSURE)
+    else if(_accType == FLAT_DETAIL_DISCLOSURE)
     {
         if(point.x > -3 && point.x < 46)
             return YES;
@@ -108,19 +139,19 @@
     return [super pointInside:point withEvent:event];
 }
 
-- (id)initWithFrame:(CGRect)frame color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor accType:(AccessoryType)accType
+- (id)initWithFrame:(CGRect)frame color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor accessoryType:(AccessoryType)accessoryType
 {
     if ((self = [super initWithFrame:frame]))
     {
 		self.backgroundColor = [UIColor clearColor];
         self.accessoryColor = color;
-        self.type = accType;
+        self.accType = accessoryType;
 
         if(!highlightedColor)
         {
-            if(_type >= FLAT_DETAIL_DISCLOSURE)
+            if(_accType >= FLAT_DETAIL_DISCLOSURE)
             {
-                if(_type == FLAT_DETAIL_BUTTON)
+                if(_accType == FLAT_DETAIL_BUTTON)
                 {
                     CGFloat h,s,v,a;
                     [_accessoryColor getHue:&h saturation:&s brightness:&v alpha:&a];
@@ -144,7 +175,7 @@
         }
         
         self.userInteractionEnabled = NO;
-        if(_type == DETAIL_DISCLOSURE || _type == FLAT_DETAIL_BUTTON)
+        if(_accType == DETAIL_DISCLOSURE || _accType == FLAT_DETAIL_BUTTON)
         {
             [self addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
             self.userInteractionEnabled = YES;
@@ -154,13 +185,13 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors accType:(AccessoryType)accType
+- (id)initWithFrame:(CGRect)frame colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors accessoryType:(AccessoryType)accessoryType
 {
     if ((self = [super initWithFrame:frame]))
     {
 		self.backgroundColor = [UIColor clearColor];
         self.accessoryColors = colors;
-        self.type = accType;
+        self.accType = accessoryType;
         if(!highlightedColors)
         {
             CGFloat h,s,v,a;
@@ -176,6 +207,22 @@
     }
     
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    //iOS5, iOS6
+    if(![NSClassFromString(@"UIMotionEffect") class])
+    {
+        CGRect frame = self.frame;
+        if(_accType != FLAT_DETAIL_DISCLOSURE)
+            frame.origin.x = kFixedPositionX;
+        else
+            frame.origin.x = kFlatDetailFixedPositionX;
+        self.frame = frame;
+    }
 }
 
 - (void)accessoryButtonTapped:(id)sender event:(UIEvent *)event
@@ -204,36 +251,9 @@
     [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
 }
 
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color
-{
-    return [self accessoryWithType:accType color:color highlightedColor:NULL];
-}
-
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor
-{
-    return [[MSCellAccessory alloc] initWithFrame:kAccessoryViewRect color:color highlightedColor:highlightedColor accType:accType];
-}
-
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType colors:(NSArray *)colors
-{
-    if(accType != FLAT_DETAIL_DISCLOSURE)
-        return [self accessoryWithType:accType color:colors[0]];
-    
-    return [self accessoryWithType:accType colors:colors highlightedColors:NULL];
-}
-
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors
-{
-    if(accType != FLAT_DETAIL_DISCLOSURE)
-        return [self accessoryWithType:accType color:colors[0] highlightedColor:highlightedColors[0]];
-
-    return [[MSCellAccessory alloc] initWithFrame:FLAT_ACCESSORY_VIEW_RECT colors:colors highlightedColors:highlightedColors accType:accType];
-}
-
-
 - (void)drawRect:(CGRect)rect
 {
-    if(_type == DETAIL_DISCLOSURE)
+    if(_accType == DETAIL_DISCLOSURE)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         UIBezierPath *ddCircle = [UIBezierPath bezierPathWithOvalInRect:kCircleRect];
@@ -290,7 +310,7 @@
         }
         CGContextRestoreGState(ctx);
     }
-    else if(_type == DISCLOSURE_INDICATOR)
+    else if(_accType == DISCLOSURE_INDICATOR)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         CGContextMoveToPoint(ctx, kDisclosureStartX-kDisclosureRadius, kDisclosureStartY-kDisclosureRadius);
@@ -311,7 +331,7 @@
         
         CGContextStrokePath(ctx);
     }
-    else if(_type == CHECKMARK)
+    else if(_accType == CHECKMARK)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         CGContextMoveToPoint(ctx, kCheckMarkStartX, kCheckMarkStartY);
@@ -332,33 +352,37 @@
         
         CGContextStrokePath(ctx);
     }
-    else if(_type == TOGGLE_INDICATOR)
+    else if(_accType == UNFOLD_INDICATOR)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
 
-        if(self.selected)
-        {
-            CGContextMoveToPoint(   ctx, kToggleIndicatorStartX-kToggleIndicatorRadius, kToggleIndicatorStartY+kToggleIndicatorRadius);
-            CGContextAddLineToPoint(ctx, kToggleIndicatorStartX,                   kToggleIndicatorStartY);
-            CGContextAddLineToPoint(ctx, kToggleIndicatorStartX+kToggleIndicatorRadius, kToggleIndicatorStartY+kToggleIndicatorRadius);
-            CGContextSetLineCap(ctx, kCGLineCapSquare);
-            CGContextSetLineJoin(ctx, kCGLineJoinMiter);
-            CGContextSetLineWidth(ctx, kToggleIndicatorLineWidth);
-        }
-        else
-        {
-            CGContextMoveToPoint(   ctx, kToggleIndicatorStartX-kToggleIndicatorRadius, kToggleIndicatorStartY);
-            CGContextAddLineToPoint(ctx, kToggleIndicatorStartX,                   kToggleIndicatorStartY+kToggleIndicatorRadius);
-            CGContextAddLineToPoint(ctx, kToggleIndicatorStartX+kToggleIndicatorRadius, kToggleIndicatorStartY);
-            CGContextSetLineCap(ctx, kCGLineCapSquare);
-            CGContextSetLineJoin(ctx, kCGLineJoinMiter);
-            CGContextSetLineWidth(ctx, kToggleIndicatorLineWidth);
-        }
+        CGContextMoveToPoint(   ctx, kToggleIndicatorStartX-kToggleIndicatorRadius, kToggleIndicatorStartY);
+        CGContextAddLineToPoint(ctx, kToggleIndicatorStartX,                   kToggleIndicatorStartY+kToggleIndicatorRadius);
+        CGContextAddLineToPoint(ctx, kToggleIndicatorStartX+kToggleIndicatorRadius, kToggleIndicatorStartY);
+        CGContextSetLineCap(ctx, kCGLineCapSquare);
+        CGContextSetLineJoin(ctx, kCGLineJoinMiter);
+        CGContextSetLineWidth(ctx, kToggleIndicatorLineWidth);
+
         [self.accessoryColor setStroke];
 
         CGContextStrokePath(ctx);
     }
-    else if(_type == FLAT_DETAIL_BUTTON)
+    else if(_accType == FOLD_INDICATOR)
+    {
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+
+        CGContextMoveToPoint(   ctx, kToggleIndicatorStartX-kToggleIndicatorRadius, kToggleIndicatorStartY+kToggleIndicatorRadius);
+        CGContextAddLineToPoint(ctx, kToggleIndicatorStartX,                   kToggleIndicatorStartY);
+        CGContextAddLineToPoint(ctx, kToggleIndicatorStartX+kToggleIndicatorRadius, kToggleIndicatorStartY+kToggleIndicatorRadius);
+        CGContextSetLineCap(ctx, kCGLineCapSquare);
+        CGContextSetLineJoin(ctx, kCGLineJoinMiter);
+        CGContextSetLineWidth(ctx, kToggleIndicatorLineWidth);
+
+        [self.accessoryColor setStroke];
+        
+        CGContextStrokePath(ctx);
+    }
+    else if(_accType == FLAT_DETAIL_BUTTON)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         UIBezierPath *markCircle = [UIBezierPath bezierPathWithOvalInRect:FLAT_DETAIL_CIRCLE_RECT];
@@ -397,7 +421,7 @@
         }
         CGContextRestoreGState(ctx);
     }
-    else if(_type == FLAT_DISCLOSURE_INDICATOR)
+    else if(_accType == FLAT_DISCLOSURE_INDICATOR)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         CGContextMoveToPoint(ctx, FLAT_DISCLOSURE_START_X-FLAT_DISCLOSURE_RADIUS, FLAT_DISCLOSURE_START_Y-FLAT_DISCLOSURE_RADIUS);
@@ -419,7 +443,7 @@
         CGContextStrokePath(ctx);
 
     }
-    else if(_type == FLAT_DETAIL_DISCLOSURE)
+    else if(_accType == FLAT_DETAIL_DISCLOSURE)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         UIBezierPath *markCircle = [UIBezierPath bezierPathWithOvalInRect:FLAT_DETAIL_CIRCLE_RECT];
@@ -484,7 +508,7 @@
         }
         CGContextRestoreGState(ctx);
     }
-    else if(_type == FLAT_CHECKMARK)
+    else if(_accType == FLAT_CHECKMARK)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         CGContextMoveToPoint(ctx, FLAT_CHECKMARK_START_X, FLAT_CHECKMARK_START_Y);
@@ -506,32 +530,46 @@
         
         CGContextStrokePath(ctx);
     }
-    else
+    else if(_accType == FLAT_UNFOLD_INDICATOR)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         
-        if(self.selected)
-        {
-            CGContextMoveToPoint(   ctx, FLAT_TOGGLE_INDICATOR_START_X-FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y+FLAT_TOGGLE_INDICATOR_RADIUS);
-            CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X, FLAT_TOGGLE_INDICATOR_START_Y);
-            CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X+FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y+FLAT_TOGGLE_INDICATOR_RADIUS);
-            CGContextSetLineCap(ctx, kCGLineCapSquare);
-            CGContextSetLineJoin(ctx, kCGLineJoinMiter);
-            CGContextSetLineWidth(ctx, FLAT_TOGGLE_INDICATOR_LINE_WIDTH);
-        }
-        else
-        {
-            CGContextMoveToPoint(   ctx, FLAT_TOGGLE_INDICATOR_START_X-FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y);
-            CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X, FLAT_TOGGLE_INDICATOR_START_Y+FLAT_TOGGLE_INDICATOR_RADIUS);
-            CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X+FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y);
-            CGContextSetLineCap(ctx, kCGLineCapSquare);
-            CGContextSetLineJoin(ctx, kCGLineJoinMiter);
-            CGContextSetLineWidth(ctx, FLAT_TOGGLE_INDICATOR_LINE_WIDTH);
-        }
+        CGContextMoveToPoint(   ctx, FLAT_TOGGLE_INDICATOR_START_X-FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y);
+        CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X, FLAT_TOGGLE_INDICATOR_START_Y+FLAT_TOGGLE_INDICATOR_RADIUS);
+        CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X+FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y);
+        CGContextSetLineCap(ctx, kCGLineCapSquare);
+        CGContextSetLineJoin(ctx, kCGLineJoinMiter);
+        CGContextSetLineWidth(ctx, FLAT_TOGGLE_INDICATOR_LINE_WIDTH);
+        
         [self.accessoryColor setStroke];
         
         CGContextStrokePath(ctx);
+    }
+    else if(_accType == FLAT_FOLD_INDICATOR)
+    {
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
 
+        CGContextMoveToPoint(   ctx, FLAT_TOGGLE_INDICATOR_START_X-FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y+FLAT_TOGGLE_INDICATOR_RADIUS);
+        CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X, FLAT_TOGGLE_INDICATOR_START_Y);
+        CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X+FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y+FLAT_TOGGLE_INDICATOR_RADIUS);
+        CGContextSetLineCap(ctx, kCGLineCapSquare);
+        CGContextSetLineJoin(ctx, kCGLineJoinMiter);
+        CGContextSetLineWidth(ctx, FLAT_TOGGLE_INDICATOR_LINE_WIDTH);
+        
+        [self.accessoryColor setStroke];
+        
+        CGContextStrokePath(ctx);
+    }
+    
+    //iOS5, iOS6
+    if(![NSClassFromString(@"UIMotionEffect") class])
+    {
+        CGRect frame = self.frame;
+        if(_accType != FLAT_DETAIL_DISCLOSURE)
+            frame.origin.x = kFixedPositionX;
+        else
+            frame.origin.x = kFlatDetailFixedPositionX;
+        self.frame = frame;
     }
 }
 

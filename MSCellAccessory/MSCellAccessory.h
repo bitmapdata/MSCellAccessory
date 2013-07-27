@@ -3,11 +3,10 @@
 //  MSCellAccessory
 //
 //  Created by SHIM MIN SEOK on 13. 6. 19..
-//  Copyright (c) 2013 SHIM MIN SEOK. All rights reserved.
 //
 //  Software License Agreement (BSD License)
 //
-//  Copyright (c) 2013 Shim Minseok. All rights reserved.
+//  Copyright (c) 2013 SHIM MIN SEOK. All rights reserved.
 //
 //  Redistribution and use in source and binary forms, with or without
 //  modification, are permitted provided that the following conditions are met:
@@ -40,23 +39,8 @@
 #import <UIKit/UIKit.h>
 
 /*
- *** Prior to iOS7
- 
- DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton
- 
- DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator
- 
- CHECKMARK: identical to UITableViewCellAccessoryCheckmark
- 
- TOGGLE_INDICATOR: Is used in the unfold / fold implementation like menu list. depending on the selected value will be changed automatically.
- 
-    - Access as follows:
-        MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
-        acc.selected = false; // V-shaped.
-        acc.selected = true;  // Vice versa shaped.
- 
  ------------------------------------------------------------------------------------------------------------------------------------------------------
- 
+
  *** iOS7 Flat Design
  
  FLAT_DETAIL_DISCLOSURE: identical to iOS7 UITableViewCellAccessoryDetailDisclosureButton
@@ -67,7 +51,25 @@
  
  FLAT_CHECKMARK: identical to iOS7 UITableViewCellAccessoryCheckmark
  
- FLAT_TOGGLE_INDICATOR: Flat TOGGLE_INDICATOR
+ FLAT_UNFOLD_INDICATOR: Flat unfold indicator
+ 
+ FLAT_FOLD_INDICATOR: Flat fold indicator
+ 
+ ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ *** Prior to iOS7
+ 
+ DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton
+ 
+ DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator
+ 
+ CHECKMARK: identical to UITableViewCellAccessoryCheckmark
+ 
+ UNFOLD_INDICATOR: unfold indicator
+ 
+ FOLD_INDICATOR: fold indicator
+ 
+ ------------------------------------------------------------------------------------------------------------------------------------------------------
 */
 
 #define DETAIL_DISCLOSURE_DEFAULT_COLOR             [UIColor colorWithRed:35/255.0 green:110/255.0 blue:216/255.0 alpha:1.0]
@@ -82,22 +84,24 @@ typedef enum
     DETAIL_DISCLOSURE,
     DISCLOSURE_INDICATOR,
     CHECKMARK,
-    TOGGLE_INDICATOR,
+    UNFOLD_INDICATOR,
+    FOLD_INDICATOR,
     FLAT_DETAIL_DISCLOSURE,
     FLAT_DETAIL_BUTTON,
     FLAT_DISCLOSURE_INDICATOR,
     FLAT_CHECKMARK,
-    FLAT_TOGGLE_INDICATOR
+    FLAT_UNFOLD_INDICATOR,
+    FLAT_FOLD_INDICATOR
 }AccessoryType;
 
 @interface MSCellAccessory : UIControl
-@property (nonatomic, readonly) AccessoryType type;
+@property (nonatomic, assign) AccessoryType accType;
 
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color;
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor;
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color;
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor;
 
 // If you using a FLAT_DETAIL_DISCLOSURE, use these method. because FLAT_DETAIL_DISCLOSURE has a two different UI (FLAT_DETAIL_BUTTON, FLAT_DISCLOSURE_INDICATOR), must set a each color.
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType colors:(NSArray *)colors;
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accType colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors;
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType colors:(NSArray *)colors;
++ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors;
 
 @end
