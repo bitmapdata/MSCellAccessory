@@ -10,7 +10,9 @@
 #import "MSCellAccessory.h"
 
 @interface TBViewController ()
-
+{
+    NSIndexPath *_selectedIndex;
+}
 @end
 
 @implementation TBViewController
@@ -57,13 +59,14 @@
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DETAIL_BUTTON];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DISCLOSURE_INDICATOR];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_CHECKMARK];
-//    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_TOGGLE_INDICATOR];
+//    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_UNFOLD_INDICATOR];
+//    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_FOLD_INDICATOR];
 //    [self configureCell:cell indexPath:indexPath accessoryType:DETAIL_DISCLOSURE];
 //    [self configureCell:cell indexPath:indexPath accessoryType:DISCLOSURE_INDICATOR];
 //    [self configureCell:cell indexPath:indexPath accessoryType:CHECKMARK];
-//    [self configureCell:cell indexPath:indexPath accessoryType:TOGGLE_INDICATOR];
+//    [self configureCell:cell indexPath:indexPath accessoryType:UNFOLD_INDICATOR];
+//    [self configureCell:cell indexPath:indexPath accessoryType:FOLD_INDICATOR];
 
-    
     return cell;
 }
 
@@ -176,16 +179,28 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
+    _selectedIndex = indexPath;
+    
     MSCellAccessory *acc = (MSCellAccessory *)[tableView cellForRowAtIndexPath:indexPath].accessoryView;
 
-    NSLog(@"didSelectRowAtIndexPath:%@ type:%d", indexPath, acc.type);
+    NSLog(@"didSelectRowAtIndexPath:%@ type:%d", indexPath, acc.accType);
+    
+    [tableView reloadRowsAtIndexPaths:[tableView indexPathsForSelectedRows] withRowAnimation:UITableViewRowAnimationBottom];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.row == _selectedIndex.row)
+        return 100;
+
+    return tableView.rowHeight;
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     MSCellAccessory *acc = (MSCellAccessory *)[tableView cellForRowAtIndexPath:indexPath].accessoryView;
     
-    NSLog(@"accessoryButtonTappedForRowWithIndexPath:%@, type:%d", indexPath, acc.type);
+    NSLog(@"accessoryButtonTappedForRowWithIndexPath:%@, type:%d", indexPath, acc.accType);
 }
 
 @end
