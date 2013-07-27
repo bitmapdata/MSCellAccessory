@@ -7,33 +7,31 @@ MSCellAccessory
 
 MSCellAccessory is a UITableViewCell accessoryType can easily customizing the colors. Many developer really want to customizing UITableViewCell accessoryType color. but, they using a customized png image are solved. but this method is not good. because Unnecessary to create an image file, and each would have to create all colors. and Loading it unnecessarily increases the capacity of the memory. If using a this library is more easily customizing accessoryType and more flexible via Programmatically.
 
-#### Prior to iOS7
- 
-    DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton
- 
-    DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator
- 
-    CHECKMARK: identical to UITableViewCellAccessoryCheckmark
- 
-    TOGGLE_INDICATOR: Is used in the unfold / fold implementation like menu list. depending on the selected value will be changed automatically.
-    
-    If you set a accessoryView type TOGGLE_INDICATOR and want to change selected value. access as follows:
-        
-    MSCellAccessory *acc = (MSCellAccessory *)cell.accessoryView;
-    acc.selected = false; // V-shaped.
-    acc.selected = true;  // Vice versa shaped.
- 
 #### iOS7 Flat Design
  
     FLAT_DETAIL_DISCLOSURE: identical to iOS7 UITableViewCellAccessoryDetailDisclosureButton
  
-    FLAT_DETAIL_BUTTON: identical to iOS7 UITableViewCellAccessoryDetailButton
+ 	FLAT_DETAIL_BUTTON: identical to iOS7 UITableViewCellAccessoryDetailButton
  
-    FLAT_DISCLOSURE_INDICATOR: identical to iOS7 UITableViewCellAccessoryDisclosureIndicator
+	FLAT_DISCLOSURE_INDICATOR: identical to iOS7 UITableViewCellAccessoryDisclosureIndicator
  
-    FLAT_CHECKMARK: identical to iOS7 UITableViewCellAccessoryCheckmark
+	FLAT_CHECKMARK: identical to iOS7 UITableViewCellAccessoryCheckmark
  
-    FLAT_TOGGLE_INDICATOR: Flat TOGGLE_INDICATOR, Same as above.
+	FLAT_UNFOLD_INDICATOR: Flat unfold indicator
+ 
+	FLAT_FOLD_INDICATOR: Flat fold indicator
+	
+#### Prior to iOS7
+ 
+ 	DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton
+ 
+	DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator
+ 
+	CHECKMARK: identical to UITableViewCellAccessoryCheckmark
+ 
+ 	UNFOLD_INDICATOR: unfold indicator
+ 
+ 	FOLD_INDICATOR: fold indicator
 
 <p align="center" >
 <img src="https://raw.github.com/bitmapdata/MSCellAccessory/master/MSCellAccessoryDemo/ScreenShot2.png">
@@ -86,13 +84,21 @@ These classes was written under the ARC. Be sure to specify `-fobjc-arc` the 'Co
         }
         else if(indexPath.row == 4)
         {
-            cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_TOGGLE_INDICATOR color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
+            cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_UNFOLD_INDICATOR color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
+        }
+        else if(indexPath.row == 4)
+        {
+            cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_FOLD_INDICATOR color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
         }
 
         return cell;
     }
 
 ## Release notes ###
+
+####    Ver 1.1.2
+* Discontinued TOGGLE_INDICATOR and change to UNFOLD_INDICATOR, FOLD_INDICATOR. flat also changed.
+* Solved what if you change a UITableViewCell height, accessoryView this will affect change the right margin. ( #issue prior to iOS7 )
 
 ####    Ver 1.1.1
 * FLAT_DETAIL_DISCLOSURE, FLAT_DETAIL_BUTTON, DETAIL_DISCLOSURE types auto linking to `- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath` delegate method. when such types accessory touched is called. same as Apple.
