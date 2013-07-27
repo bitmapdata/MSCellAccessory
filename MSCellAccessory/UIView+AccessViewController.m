@@ -1,6 +1,6 @@
 //
 //  UIView+AccessViewController.m
-//  MSCellAccessoryDemo
+//  MSCellAccessory
 //
 //  Created by SHIM MIN SEOK on 13. 7. 22..
 //  Copyright (c) 2013 SHIM MIN SEOK. All rights reserved.
@@ -12,10 +12,9 @@
 - (UIViewController *)viewController;
 {
     id nextResponder = [self nextResponder];
-    if ([nextResponder isKindOfClass:[UIViewController class]]) {
+    if ([nextResponder isKindOfClass:[UIViewController class]])
         return nextResponder;
-    } else {
+    else
         return nil;
-    }
 }
 @end
