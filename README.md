@@ -86,7 +86,7 @@ These classes was written under the ARC. Be sure to specify `-fobjc-arc` the 'Co
         {
             cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_UNFOLD_INDICATOR color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
         }
-        else if(indexPath.row == 4)
+        else if(indexPath.row == 5)
         {
             cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_FOLD_INDICATOR color:[UIColor colorWithRed:0/255.0 green:123/255.0 blue:170/255.0 alpha:1.0]];
         }
@@ -99,6 +99,7 @@ These classes was written under the ARC. Be sure to specify `-fobjc-arc` the 'Co
 ####    Ver 1.1.2
 * Discontinued TOGGLE_INDICATOR and change to UNFOLD_INDICATOR, FOLD_INDICATOR. flat also changed.
 * Solved what if you change a UITableViewCell height, accessoryView this will affect change the right margin. ( #issue prior to iOS7 )
+* Modified accessoryView frame, divided separately Plain Style and Grouped Style. ( #issue prior to iOS7 )
 
 ####    Ver 1.1.1
 * FLAT_DETAIL_DISCLOSURE, FLAT_DETAIL_BUTTON, DETAIL_DISCLOSURE types auto linking to `- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath` delegate method. when such types accessory touched is called. same as Apple.
