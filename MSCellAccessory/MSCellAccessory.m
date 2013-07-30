@@ -216,12 +216,17 @@
     //iOS5, iOS6
     if(![NSClassFromString(@"UIMotionEffect") class])
     {
-        CGRect frame = self.frame;
-        if(_accType != FLAT_DETAIL_DISCLOSURE)
-            frame.origin.x = kFixedPositionX;
-        else
-            frame.origin.x = kFlatDetailFixedPositionX;
-        self.frame = frame;
+        UITableView *tb = (UITableView *)self.superview.superview;
+
+        if(tb.style == UITableViewStylePlain)
+        {
+            CGRect frame = self.frame;
+            if(_accType != FLAT_DETAIL_DISCLOSURE)
+                frame.origin.x = kFixedPositionX;
+            else
+                frame.origin.x = kFlatDetailFixedPositionX;
+            self.frame = frame;
+        }
     }
 }
 
@@ -564,12 +569,26 @@
     //iOS5, iOS6
     if(![NSClassFromString(@"UIMotionEffect") class])
     {
-        CGRect frame = self.frame;
-        if(_accType != FLAT_DETAIL_DISCLOSURE)
-            frame.origin.x = kFixedPositionX;
+        UITableView *tb = (UITableView *)self.superview.superview;
+        
+        if(tb.style == UITableViewStylePlain)
+        {
+            CGRect frame = self.frame;
+            if(_accType != FLAT_DETAIL_DISCLOSURE)
+                frame.origin.x = kFixedPositionX;
+            else
+                frame.origin.x = kFlatDetailFixedPositionX;
+            self.frame = frame;
+        }
         else
-            frame.origin.x = kFlatDetailFixedPositionX;
-        self.frame = frame;
+        {
+            CGRect frame = self.frame;
+            if(_accType != FLAT_DETAIL_DISCLOSURE)
+                frame.origin.x = kFixedPositionX - 10;
+            else
+                frame.origin.x = kFlatDetailFixedPositionX;
+            self.frame = frame;
+        }
     }
 }
 
