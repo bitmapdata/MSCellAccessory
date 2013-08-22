@@ -239,7 +239,7 @@
     //iOS7 above
     if([NSClassFromString(@"UIMotionEffect") class])
     {
-        superTableView = (UITableView *)self.superview.superview.superview;
+        superTableView = (UITableView *)self.superview.superview.superview.superview;
         superController = (UITableViewController *)superTableView.viewController;
         superTableViewCell = (UITableViewCell *)self.superview.superview;
         indexPath = [superTableView indexPathForCell:superTableViewCell];
