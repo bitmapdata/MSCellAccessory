@@ -240,7 +240,7 @@
     if([NSClassFromString(@"UIMotionEffect") class])
     {
         superTableView = (UITableView *)self.superview.superview.superview.superview;
-        superController = (UITableViewController *)superTableView.viewController;
+        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
         superTableViewCell = (UITableViewCell *)self.superview.superview;
         indexPath = [superTableView indexPathForCell:superTableViewCell];
     }
@@ -248,7 +248,7 @@
     else
     {
         superTableView = (UITableView *)self.superview.superview;
-        superController = (UITableViewController *)superTableView.viewController;
+        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
         superTableViewCell = (UITableViewCell *)self.superview;
         indexPath = [superTableView indexPathForCell:superTableViewCell];
     }
