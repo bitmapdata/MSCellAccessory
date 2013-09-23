@@ -146,7 +146,8 @@
 		self.backgroundColor = [UIColor clearColor];
         self.accessoryColor = color;
         self.accType = accessoryType;
-
+        self.isAutoLayout = YES;
+        
         if(!highlightedColor)
         {
             if(_accType >= FLAT_DETAIL_DISCLOSURE)
@@ -192,6 +193,8 @@
 		self.backgroundColor = [UIColor clearColor];
         self.accessoryColors = colors;
         self.accType = accessoryType;
+        self.isAutoLayout = YES;
+
         if(!highlightedColors)
         {
             CGFloat h,s,v,a;
@@ -213,11 +216,12 @@
 {
     [super layoutSubviews];
     
+    if(!_isAutoLayout) return;
     //iOS5, iOS6
     if(![NSClassFromString(@"UIMotionEffect") class])
     {
         UITableView *tb = (UITableView *)self.superview.superview;
-
+        
         if(tb.style == UITableViewStylePlain)
         {
             CGRect frame = self.frame;
@@ -270,9 +274,9 @@
             CGContextDrawPath(ctx, kCGPathFill);
         }
         CGContextRestoreGState(ctx);
-
+        
         CGContextSaveGState(ctx);
-        {            
+        {
             CGContextAddPath(ctx, ddCircle.CGPath);
             CGFloat h,s,v,a;
             UIColor *color = NULL;
@@ -360,29 +364,29 @@
     else if(_accType == UNFOLD_INDICATOR)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
-
+        
         CGContextMoveToPoint(   ctx, kToggleIndicatorStartX-kToggleIndicatorRadius, kToggleIndicatorStartY);
         CGContextAddLineToPoint(ctx, kToggleIndicatorStartX,                   kToggleIndicatorStartY+kToggleIndicatorRadius);
         CGContextAddLineToPoint(ctx, kToggleIndicatorStartX+kToggleIndicatorRadius, kToggleIndicatorStartY);
         CGContextSetLineCap(ctx, kCGLineCapSquare);
         CGContextSetLineJoin(ctx, kCGLineJoinMiter);
         CGContextSetLineWidth(ctx, kToggleIndicatorLineWidth);
-
+        
         [self.accessoryColor setStroke];
-
+        
         CGContextStrokePath(ctx);
     }
     else if(_accType == FOLD_INDICATOR)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
-
+        
         CGContextMoveToPoint(   ctx, kToggleIndicatorStartX-kToggleIndicatorRadius, kToggleIndicatorStartY+kToggleIndicatorRadius);
         CGContextAddLineToPoint(ctx, kToggleIndicatorStartX,                   kToggleIndicatorStartY);
         CGContextAddLineToPoint(ctx, kToggleIndicatorStartX+kToggleIndicatorRadius, kToggleIndicatorStartY+kToggleIndicatorRadius);
         CGContextSetLineCap(ctx, kCGLineCapSquare);
         CGContextSetLineJoin(ctx, kCGLineJoinMiter);
         CGContextSetLineWidth(ctx, kToggleIndicatorLineWidth);
-
+        
         [self.accessoryColor setStroke];
         
         CGContextStrokePath(ctx);
@@ -391,7 +395,7 @@
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
         UIBezierPath *markCircle = [UIBezierPath bezierPathWithOvalInRect:FLAT_DETAIL_CIRCLE_RECT];
-
+        
         CGContextSaveGState(ctx);
         {
             CGContextAddPath(ctx, markCircle.CGPath);
@@ -414,7 +418,7 @@
             CGContextMoveToPoint(ctx, FLAT_DETAIL_BUTTON_VERTICAL_START_POINT.x, FLAT_DETAIL_BUTTON_VERTICAL_START_POINT.y);
             CGContextAddLineToPoint(ctx, FLAT_DETAIL_BUTTON_VERTICAL_END_POINT.x, FLAT_DETAIL_BUTTON_VERTICAL_END_POINT.y);
             CGContextStrokePath(ctx);
-
+            
             CGFloat lineWidth = FLAT_DETAIL_BUTTON_HORIZONTAL_WIDTH;
             CGContextSetLineWidth(ctx, lineWidth);
             CGContextMoveToPoint(ctx, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_START_POINT.x, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_START_POINT.y);
@@ -446,7 +450,7 @@
         }
         
         CGContextStrokePath(ctx);
-
+        
     }
     else if(_accType == FLAT_DETAIL_DISCLOSURE)
     {
@@ -553,7 +557,7 @@
     else if(_accType == FLAT_FOLD_INDICATOR)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
-
+        
         CGContextMoveToPoint(   ctx, FLAT_TOGGLE_INDICATOR_START_X-FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y+FLAT_TOGGLE_INDICATOR_RADIUS);
         CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X, FLAT_TOGGLE_INDICATOR_START_Y);
         CGContextAddLineToPoint(ctx, FLAT_TOGGLE_INDICATOR_START_X+FLAT_TOGGLE_INDICATOR_RADIUS, FLAT_TOGGLE_INDICATOR_START_Y+FLAT_TOGGLE_INDICATOR_RADIUS);
@@ -566,6 +570,8 @@
         CGContextStrokePath(ctx);
     }
     
+    if(!_isAutoLayout) return;
+
     //iOS5, iOS6
     if(![NSClassFromString(@"UIMotionEffect") class])
     {
@@ -615,7 +621,7 @@
 	{
 		return [UIColor whiteColor];
 	}
-        
+    
 	return _highlightedColor;
 }
 

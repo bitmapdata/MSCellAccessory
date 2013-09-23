@@ -40,7 +40,7 @@
 
 /*
  ------------------------------------------------------------------------------------------------------------------------------------------------------
-
+ 
  *** iOS7 Flat Design
  
  FLAT_DETAIL_DISCLOSURE: identical to iOS7 UITableViewCellAccessoryDetailDisclosureButton
@@ -56,7 +56,7 @@
  FLAT_FOLD_INDICATOR: Flat fold indicator
  
  ------------------------------------------------------------------------------------------------------------------------------------------------------
-
+ 
  *** Prior to iOS7
  
  DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton
@@ -70,7 +70,7 @@
  FOLD_INDICATOR: fold indicator
  
  ------------------------------------------------------------------------------------------------------------------------------------------------------
-*/
+ */
 
 #define DETAIL_DISCLOSURE_DEFAULT_COLOR             [UIColor colorWithRed:35/255.0 green:110/255.0 blue:216/255.0 alpha:1.0]
 #define DISCLOSURE_INDICATOR_DEFAULT_COLOR          [UIColor colorWithRed:127/255.0 green:127/255.0 blue:127/255.0 alpha:1.0]
@@ -96,6 +96,7 @@ typedef enum
 
 @interface MSCellAccessory : UIControl
 @property (nonatomic, assign) AccessoryType accType;
+@property (nonatomic, assign) BOOL isAutoLayout; //default is YES. if set to NO, accessory layout does not adjust automatically.
 
 + (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color;
 + (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor;
