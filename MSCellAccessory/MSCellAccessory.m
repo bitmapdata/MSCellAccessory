@@ -155,7 +155,10 @@
                 if(_accType == FLAT_DETAIL_BUTTON)
                 {
                     CGFloat h,s,v,a;
-                    [_accessoryColor getHue:&h saturation:&s brightness:&v alpha:&a];
+                    // Crash below iOS 5
+                    if ([_accessoryColor respondsToSelector:@selector(getHue:saturation:brightness:alpha:)]) {
+                        [_accessoryColor getHue:&h saturation:&s brightness:&v alpha:&a];
+                    }
                     self.highlightedColor = [UIColor colorWithHue:h saturation:s-kHighlightedFlatColorGapS brightness:v alpha:a];
                 }
                 else
@@ -166,7 +169,10 @@
             else
             {
                 CGFloat h,s,v,a;
-                [_accessoryColor getHue:&h saturation:&s brightness:&v alpha:&a];
+                // Crash below iOS 5
+                if ([_accessoryColor respondsToSelector:@selector(getHue:saturation:brightness:alpha:)]) {
+                    [_accessoryColor getHue:&h saturation:&s brightness:&v alpha:&a];
+                }
                 self.highlightedColor = [UIColor colorWithHue:h+kHighlightedColorGapH saturation:s+kHighlightedColorGapS brightness:v+kHighlightedColorGapV alpha:a];
             }
         }
