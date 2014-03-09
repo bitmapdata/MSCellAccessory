@@ -263,7 +263,12 @@
         indexPath = [superTableView indexPathForCell:superTableViewCell];
     }
     
-    [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
+    if ([superController respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
+        [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
+    }
+    else {
+        NSAssert(0, @"superController must implement tableView:accessoryButtonTappedForRowWithIndexPath:");
+    }
 }
 
 - (void)drawRect:(CGRect)rect
