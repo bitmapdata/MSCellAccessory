@@ -79,30 +79,34 @@
 #define FLAT_DISCLOSURE_INDICATOR_DEFAULT_COLOR     [UIColor colorWithRed:199/255.0 green:199/255.0 blue:204/255.0 alpha:1.0]
 #define FLAT_CHECKMARK_DEFAULT_COLOR                [UIColor colorWithRed:0/255.0 green:122/255.0 blue:255/255.0 alpha:1.0]
 
-typedef enum
+typedef NS_ENUM(NSInteger, MSCellAccessoryType)
 {
     DETAIL_DISCLOSURE,
     DISCLOSURE_INDICATOR,
     CHECKMARK,
     UNFOLD_INDICATOR,
     FOLD_INDICATOR,
+    PLUS_INDICATOR,
+    MINUS_INDICATOR,
     FLAT_DETAIL_DISCLOSURE,
     FLAT_DETAIL_BUTTON,
     FLAT_DISCLOSURE_INDICATOR,
     FLAT_CHECKMARK,
     FLAT_UNFOLD_INDICATOR,
-    FLAT_FOLD_INDICATOR
-}AccessoryType;
+    FLAT_FOLD_INDICATOR,
+    FLAT_PLUS_INDICATOR,
+    FLAT_MINUS_INDICATOR
+};
 
 @interface MSCellAccessory : UIControl
-@property (nonatomic, assign) AccessoryType accType;
+@property (nonatomic, assign) MSCellAccessoryType accType;
 @property (nonatomic, assign) BOOL isAutoLayout; //default is YES. if set to NO, accessory layout does not adjust automatically.
 
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color;
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor;
++ (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType color:(UIColor *)color;
++ (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor;
 
 // If you using a FLAT_DETAIL_DISCLOSURE, use these method. because FLAT_DETAIL_DISCLOSURE has a two different UI (FLAT_DETAIL_BUTTON, FLAT_DISCLOSURE_INDICATOR), must set a each color.
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType colors:(NSArray *)colors;
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors;
++ (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType colors:(NSArray *)colors;
++ (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors;
 
 @end

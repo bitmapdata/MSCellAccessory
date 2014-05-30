@@ -51,6 +51,8 @@
 #define kToggleIndicatorRadius          5.5
 #define kToggleIndicatorLineWidth       3.5
 
+#define kAddIndicatorShadowOffset         CGSizeMake(.0f, -1.f)
+
 #define FLAT_ACCESSORY_VIEW_RECT                            CGRectMake(0, 0, 52.0, 32.0)
 #define FLAT_STROKE_WIDTH                                   1.0
 #define FLAT_DETAIL_CIRCLE_RECT                             CGRectMake(10.5, 5.5, 21.0, 21.0)
@@ -84,6 +86,12 @@
 #define FLAT_TOGGLE_INDICATOR_RADIUS                        5.0
 #define FLAT_TOGGLE_INDICATOR_LINE_WIDTH                    2.0
 
+#define kFlatDrawLineWidth                                  1.0
+#define kFlatLineStartX                                     4.5
+#define kFlatLineStartY                                     4.5
+#define kFlatLineWidth                                     11.0
+#define kFlatLineHeight                                     11.0
+
 @interface MSCellAccessory()
 @property (nonatomic, strong) UIColor *accessoryColor;
 @property (nonatomic, strong) UIColor *highlightedColor;
@@ -95,17 +103,17 @@
 
 #pragma mark - Factory
 
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color
++ (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType color:(UIColor *)color
 {
     return [self accessoryWithType:accessoryType color:color highlightedColor:NULL];
 }
 
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor
++ (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor
 {
     return [[MSCellAccessory alloc] initWithFrame:kAccessoryViewRect color:color highlightedColor:highlightedColor accessoryType:accessoryType];
 }
 
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType colors:(NSArray *)colors
++ (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType colors:(NSArray *)colors
 {
     if(accessoryType != FLAT_DETAIL_DISCLOSURE)
         return [self accessoryWithType:accessoryType color:colors[0]];
@@ -113,7 +121,7 @@
     return [self accessoryWithType:accessoryType colors:colors highlightedColors:NULL];
 }
 
-+ (MSCellAccessory *)accessoryWithType:(AccessoryType)accessoryType colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors
++ (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors
 {
     if(accessoryType != FLAT_DETAIL_DISCLOSURE)
         return [self accessoryWithType:accessoryType color:colors[0] highlightedColor:highlightedColors[0]];
@@ -125,7 +133,7 @@
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
-    if(_accType == FLAT_DETAIL_BUTTON || _accType == DETAIL_DISCLOSURE)
+    if(_accType == FLAT_DETAIL_BUTTON || _accType == DETAIL_DISCLOSURE || _accType == PLUS_INDICATOR)
     {
         if(point.x > 0)
             return YES;
@@ -139,7 +147,7 @@
     return [super pointInside:point withEvent:event];
 }
 
-- (id)initWithFrame:(CGRect)frame color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor accessoryType:(AccessoryType)accessoryType
+- (id)initWithFrame:(CGRect)frame color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor accessoryType:(MSCellAccessoryType)accessoryType
 {
     if ((self = [super initWithFrame:frame]))
     {
@@ -154,9 +162,13 @@
             {
                 if(_accType == FLAT_DETAIL_BUTTON)
                 {
-                    CGFloat h,s,v,a;
+                    CGFloat h = 0.f;
+                    CGFloat s = 0.f;
+                    CGFloat v = 0.f;
+                    CGFloat a = 0.f;
                     // Crash below iOS 5
-                    if ([_accessoryColor respondsToSelector:@selector(getHue:saturation:brightness:alpha:)]) {
+                    if ([_accessoryColor respondsToSelector:@selector(getHue:saturation:brightness:alpha:)])
+                    {
                         [_accessoryColor getHue:&h saturation:&s brightness:&v alpha:&a];
                     }
                     self.highlightedColor = [UIColor colorWithHue:h saturation:s-kHighlightedFlatColorGapS brightness:v alpha:a];
@@ -168,9 +180,13 @@
             }
             else
             {
-                CGFloat h,s,v,a;
+                CGFloat h = 0.f;
+                CGFloat s = 0.f;
+                CGFloat v = 0.f;
+                CGFloat a = 0.f;
                 // Crash below iOS 5
-                if ([_accessoryColor respondsToSelector:@selector(getHue:saturation:brightness:alpha:)]) {
+                if ([_accessoryColor respondsToSelector:@selector(getHue:saturation:brightness:alpha:)])
+                {
                     [_accessoryColor getHue:&h saturation:&s brightness:&v alpha:&a];
                 }
                 self.highlightedColor = [UIColor colorWithHue:h+kHighlightedColorGapH saturation:s+kHighlightedColorGapS brightness:v+kHighlightedColorGapV alpha:a];
@@ -192,7 +208,7 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors accessoryType:(AccessoryType)accessoryType
+- (id)initWithFrame:(CGRect)frame colors:(NSArray *)colors highlightedColors:(NSArray *)highlightedColors accessoryType:(MSCellAccessoryType)accessoryType
 {
     if ((self = [super initWithFrame:frame]))
     {
@@ -402,41 +418,116 @@
         
         CGContextStrokePath(ctx);
     }
-    else if(_accType == FLAT_DETAIL_BUTTON)
+    else if(_accType == PLUS_INDICATOR)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
-        UIBezierPath *markCircle = [UIBezierPath bezierPathWithOvalInRect:FLAT_DETAIL_CIRCLE_RECT];
+        UIBezierPath *ddCircle = [UIBezierPath bezierPathWithOvalInRect:kCircleRect];
         
         CGContextSaveGState(ctx);
         {
-            CGContextAddPath(ctx, markCircle.CGPath);
-            CGContextSetLineWidth(ctx, FLAT_STROKE_WIDTH);
-            CGContextSetStrokeColorWithColor(ctx, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
-            CGContextDrawPath(ctx, kCGPathStroke);
-            CGContextSetLineCap(ctx, kCGLineCapSquare);
+            CGContextAddEllipseInRect(ctx, kCircleShadowOverlayRect);
+            CGContextSetShadowWithColor(ctx, kShadowOffset, kShadowRadius, kShadowColor.CGColor );
+            CGContextDrawPath(ctx, kCGPathFill);
         }
         CGContextRestoreGState(ctx);
         
         CGContextSaveGState(ctx);
         {
+            CGContextAddPath(ctx, ddCircle.CGPath);
+            CGFloat h,s,v,a;
+            UIColor *color = NULL;
+            color = self.touchInside?_highlightedColor:_accessoryColor;
+            [color getHue:&h saturation:&s brightness:&v alpha:&a];
+            UIColor *overlayColor = [UIColor colorWithHue:h saturation:s+kOverlayColorGapS brightness:v+kOverlayColorGapV alpha:a];
+            CGContextSetFillColorWithColor(ctx, overlayColor.CGColor);
+            CGContextDrawPath(ctx, kCGPathFill);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextAddPath(ctx, ddCircle.CGPath);
+            CGContextClip(ctx);
+            CGContextAddEllipseInRect(ctx, kCircleOverlayRect);
             CGContextSetFillColorWithColor(ctx, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
-            
-            CGContextFillEllipseInRect(ctx, FLAT_DETAIL_BUTTON_DOT_FRAME);
-            
-            CGContextSetStrokeColorWithColor(ctx, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
-            
-            CGContextSetLineWidth(ctx, FLAT_DETAIL_BUTTON_VERTICAL_WIDTH);
-            CGContextMoveToPoint(ctx, FLAT_DETAIL_BUTTON_VERTICAL_START_POINT.x, FLAT_DETAIL_BUTTON_VERTICAL_START_POINT.y);
-            CGContextAddLineToPoint(ctx, FLAT_DETAIL_BUTTON_VERTICAL_END_POINT.x, FLAT_DETAIL_BUTTON_VERTICAL_END_POINT.y);
+            CGContextDrawPath(ctx, kCGPathFill);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextAddPath(ctx, ddCircle.CGPath);
+            CGContextSetLineWidth(ctx, kStrokeWidth);
+            CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
+            CGContextDrawPath(ctx, kCGPathStroke);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextSetShadowWithColor(ctx, kAddIndicatorShadowOffset, 0, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
+            CGContextMoveToPoint(ctx, kDetailDisclosurePositon.x-3.5, kDetailDisclosurePositon.y-kDetailDisclosureRadius-1.0);
+            CGContextAddLineToPoint(ctx, kDetailDisclosurePositon.x-3.5, kDetailDisclosurePositon.y+6.5);
+            CGContextMoveToPoint(ctx, kDetailDisclosurePositon.x-10, kDetailDisclosurePositon.y);
+            CGContextAddLineToPoint(ctx, kDetailDisclosurePositon.x+3, kDetailDisclosurePositon.y);
+            CGContextSetLineWidth(ctx, kDisclosureWidth);
+            CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
             CGContextStrokePath(ctx);
-            
-            CGFloat lineWidth = FLAT_DETAIL_BUTTON_HORIZONTAL_WIDTH;
-            CGContextSetLineWidth(ctx, lineWidth);
-            CGContextMoveToPoint(ctx, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_START_POINT.x, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_START_POINT.y);
-            CGContextAddLineToPoint(ctx, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_END_POINT.x, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_END_POINT.y);
-            
-            CGContextMoveToPoint(ctx, FLAT_DETAIL_BUTTON_BOTTOM_HORIZONTAL_START_POINT.x, FLAT_DETAIL_BUTTON_BOTTOM_HORIZONTAL_START_POINT.y);
-            CGContextAddLineToPoint(ctx, FLAT_DETAIL_BUTTON_BOTTOM_HORIZONTAL_END_POINT.x, FLAT_DETAIL_BUTTON_BOTTOM_HORIZONTAL_END_POINT.y);
+        }
+        CGContextRestoreGState(ctx);
+    }
+    else if(_accType == MINUS_INDICATOR)
+    {
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        UIBezierPath *ddCircle = [UIBezierPath bezierPathWithOvalInRect:kCircleRect];
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextAddEllipseInRect(ctx, kCircleShadowOverlayRect);
+            CGContextSetShadowWithColor(ctx, kShadowOffset, kShadowRadius, kShadowColor.CGColor );
+            CGContextDrawPath(ctx, kCGPathFill);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextAddPath(ctx, ddCircle.CGPath);
+            CGFloat h,s,v,a;
+            UIColor *color = NULL;
+            color = self.touchInside?_highlightedColor:_accessoryColor;
+            [color getHue:&h saturation:&s brightness:&v alpha:&a];
+            UIColor *overlayColor = [UIColor colorWithHue:h saturation:s+kOverlayColorGapS brightness:v+kOverlayColorGapV alpha:a];
+            CGContextSetFillColorWithColor(ctx, overlayColor.CGColor);
+            CGContextDrawPath(ctx, kCGPathFill);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextAddPath(ctx, ddCircle.CGPath);
+            CGContextClip(ctx);
+            CGContextAddEllipseInRect(ctx, kCircleOverlayRect);
+            CGContextSetFillColorWithColor(ctx, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
+            CGContextDrawPath(ctx, kCGPathFill);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextAddPath(ctx, ddCircle.CGPath);
+            CGContextSetLineWidth(ctx, kStrokeWidth);
+            CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
+            CGContextDrawPath(ctx, kCGPathStroke);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextSetShadowWithColor(ctx, kAddIndicatorShadowOffset, 0, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
+            CGContextMoveToPoint(ctx, kDetailDisclosurePositon.x-10, kDetailDisclosurePositon.y);
+            CGContextAddLineToPoint(ctx, kDetailDisclosurePositon.x+3, kDetailDisclosurePositon.y);
+            CGContextSetLineWidth(ctx, kDisclosureWidth);
+            CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
             CGContextStrokePath(ctx);
         }
         CGContextRestoreGState(ctx);
@@ -528,6 +619,45 @@
         }
         CGContextRestoreGState(ctx);
     }
+    else if(_accType == FLAT_DETAIL_BUTTON)
+    {
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        UIBezierPath *markCircle = [UIBezierPath bezierPathWithOvalInRect:FLAT_DETAIL_CIRCLE_RECT];
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextSetLineWidth(ctx, FLAT_STROKE_WIDTH);
+            CGContextSetStrokeColorWithColor(ctx, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
+            CGContextDrawPath(ctx, kCGPathStroke);
+            CGContextSetLineCap(ctx, kCGLineCapSquare);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextSetFillColorWithColor(ctx, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
+            
+            CGContextFillEllipseInRect(ctx, FLAT_DETAIL_BUTTON_DOT_FRAME);
+            
+            CGContextSetStrokeColorWithColor(ctx, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
+            
+            CGContextSetLineWidth(ctx, FLAT_DETAIL_BUTTON_VERTICAL_WIDTH);
+            CGContextMoveToPoint(ctx, FLAT_DETAIL_BUTTON_VERTICAL_START_POINT.x, FLAT_DETAIL_BUTTON_VERTICAL_START_POINT.y);
+            CGContextAddLineToPoint(ctx, FLAT_DETAIL_BUTTON_VERTICAL_END_POINT.x, FLAT_DETAIL_BUTTON_VERTICAL_END_POINT.y);
+            CGContextStrokePath(ctx);
+            
+            CGFloat lineWidth = FLAT_DETAIL_BUTTON_HORIZONTAL_WIDTH;
+            CGContextSetLineWidth(ctx, lineWidth);
+            CGContextMoveToPoint(ctx, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_START_POINT.x, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_START_POINT.y);
+            CGContextAddLineToPoint(ctx, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_END_POINT.x, FLAT_DETAIL_BUTTON_TOP_HORIZONTAL_END_POINT.y);
+            
+            CGContextMoveToPoint(ctx, FLAT_DETAIL_BUTTON_BOTTOM_HORIZONTAL_START_POINT.x, FLAT_DETAIL_BUTTON_BOTTOM_HORIZONTAL_START_POINT.y);
+            CGContextAddLineToPoint(ctx, FLAT_DETAIL_BUTTON_BOTTOM_HORIZONTAL_END_POINT.x, FLAT_DETAIL_BUTTON_BOTTOM_HORIZONTAL_END_POINT.y);
+            CGContextStrokePath(ctx);
+        }
+        CGContextRestoreGState(ctx);
+    }
     else if(_accType == FLAT_CHECKMARK)
     {
         CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -579,6 +709,84 @@
         [self.accessoryColor setStroke];
         
         CGContextStrokePath(ctx);
+    }
+    else if(_accType == FLAT_PLUS_INDICATOR)
+    {
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        
+        UIBezierPath *markCircle = [UIBezierPath bezierPathWithOvalInRect:FLAT_DETAIL_CIRCLE_RECT];
+
+        CGContextSaveGState(ctx);
+        {
+            CGContextSetShadowWithColor(ctx, CGSizeMake(0, 2.5), 0, [UIColor colorWithWhite:243/255.0 alpha:1.0].CGColor);
+            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextDrawPath(ctx, kCGPathFill);
+            CGContextSetBlendMode (ctx, kCGBlendModeNormal);
+        }
+        CGContextRestoreGState(ctx);
+
+        CGContextSaveGState(ctx);
+        {
+            CGContextSetStrokeColorWithColor(ctx, _accessoryColor.CGColor);
+            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextSetFillColorWithColor(ctx, _accessoryColor.CGColor);
+            CGContextDrawPath(ctx, kCGPathFillStroke);
+            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextDrawPath(ctx, kCGPathFillStroke);
+            CGContextFillPath(ctx);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextSetShadowWithColor(ctx, kAddIndicatorShadowOffset, 0, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
+            CGContextMoveToPoint(ctx, FLAT_DETAIL_CIRCLE_RECT.origin.x + FLAT_DETAIL_CIRCLE_RECT.size.width/2.0 - kFlatDrawLineWidth/2.0, FLAT_DETAIL_CIRCLE_RECT.origin.y + kFlatLineStartY);
+            CGContextAddLineToPoint(ctx, FLAT_DETAIL_CIRCLE_RECT.origin.x + FLAT_DETAIL_CIRCLE_RECT.size.width/2.0 - kFlatDrawLineWidth/2.0, FLAT_DETAIL_CIRCLE_RECT.origin.y + kFlatLineStartY + kFlatLineHeight);
+            CGContextMoveToPoint(ctx, FLAT_DETAIL_CIRCLE_RECT.origin.x + kFlatLineStartX, FLAT_DETAIL_CIRCLE_RECT.origin.y + FLAT_DETAIL_CIRCLE_RECT.size.height/2.0 - kFlatDrawLineWidth/2.0);
+            CGContextAddLineToPoint(ctx, FLAT_DETAIL_CIRCLE_RECT.origin.x + kFlatLineStartX + kFlatLineWidth, FLAT_DETAIL_CIRCLE_RECT.origin.y + FLAT_DETAIL_CIRCLE_RECT.size.height/2.0 - kFlatDrawLineWidth/2.0);
+            CGContextSetLineWidth(ctx, kFlatDrawLineWidth);
+            CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
+            CGContextStrokePath(ctx);
+        }
+        CGContextRestoreGState(ctx);
+    }
+    else if(_accType == FLAT_MINUS_INDICATOR)
+    {
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        
+        UIBezierPath *markCircle = [UIBezierPath bezierPathWithOvalInRect:FLAT_DETAIL_CIRCLE_RECT];
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextSetShadowWithColor(ctx, CGSizeMake(0, 2.5), 0, [UIColor colorWithWhite:243/255.0 alpha:1.0].CGColor);
+            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextDrawPath(ctx, kCGPathFill);
+            CGContextSetBlendMode (ctx, kCGBlendModeNormal);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextSetStrokeColorWithColor(ctx, _accessoryColor.CGColor);
+            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextSetFillColorWithColor(ctx, _accessoryColor.CGColor);
+            CGContextDrawPath(ctx, kCGPathFillStroke);
+            CGContextAddPath(ctx, markCircle.CGPath);
+            CGContextDrawPath(ctx, kCGPathFillStroke);
+            CGContextFillPath(ctx);
+        }
+        CGContextRestoreGState(ctx);
+        
+        CGContextSaveGState(ctx);
+        {
+            CGContextSetShadowWithColor(ctx, kAddIndicatorShadowOffset, 0, self.touchInside?_highlightedColor.CGColor:_accessoryColor.CGColor);
+            CGContextMoveToPoint(ctx, FLAT_DETAIL_CIRCLE_RECT.origin.x + kFlatLineStartX, FLAT_DETAIL_CIRCLE_RECT.origin.y + FLAT_DETAIL_CIRCLE_RECT.size.height/2.0 - kFlatDrawLineWidth/2.0);
+            CGContextAddLineToPoint(ctx, FLAT_DETAIL_CIRCLE_RECT.origin.x + kFlatLineStartX + kFlatLineWidth, FLAT_DETAIL_CIRCLE_RECT.origin.y + FLAT_DETAIL_CIRCLE_RECT.size.height/2.0 - kFlatDrawLineWidth/2.0);
+            CGContextSetLineWidth(ctx, kFlatDrawLineWidth);
+            CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
+            CGContextStrokePath(ctx);
+        }
+        CGContextRestoreGState(ctx);
     }
     
     if(!_isAutoLayout) return;
