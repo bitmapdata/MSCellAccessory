@@ -11,28 +11,39 @@ MSCellAccessory is a UITableViewCell accessoryType can easily customizing the co
  
     FLAT_DETAIL_DISCLOSURE: identical to iOS7 UITableViewCellAccessoryDetailDisclosureButton
  
- 	FLAT_DETAIL_BUTTON: identical to iOS7 UITableViewCellAccessoryDetailButton
+    FLAT_DETAIL_BUTTON: identical to iOS7 UITableViewCellAccessoryDetailButton
  
-	FLAT_DISCLOSURE_INDICATOR: identical to iOS7 UITableViewCellAccessoryDisclosureIndicator
+    FLAT_DISCLOSURE_INDICATOR: identical to iOS7 UITableViewCellAccessoryDisclosureIndicator
  
-	FLAT_CHECKMARK: identical to iOS7 UITableViewCellAccessoryCheckmark
+    FLAT_CHECKMARK: identical to iOS7 UITableViewCellAccessoryCheckmark
  
-	FLAT_UNFOLD_INDICATOR: Flat unfold indicator
+    FLAT_UNFOLD_INDICATOR: Flat unfold indicator
  
-	FLAT_FOLD_INDICATOR: Flat fold indicator
+    FLAT_FOLD_INDICATOR: Flat fold indicator
+
+    FLAT_PLUS_INDICATOR: Flat plus indicator
+
+    FLAT_MINUS_INDICATOR: Flat minus indicator
 	
 #### Prior to iOS7
  
- 	DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton
+    DETAIL_DISCLOSURE: identical to UITableViewCellAccessoryDetailDisclosureButton
  
-	DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator
+    DISCLOSURE_INDICATOR: identical to UITableViewCellAccessoryDisclosureIndicator
  
-	CHECKMARK: identical to UITableViewCellAccessoryCheckmark
+    CHECKMARK: identical to UITableViewCellAccessoryCheckmark
  
- 	UNFOLD_INDICATOR: unfold indicator
+    UNFOLD_INDICATOR: Unfold indicator
  
- 	FOLD_INDICATOR: fold indicator
+    FOLD_INDICATOR: Fold indicator
 
+    PLUS_INDICATOR: Plus indicator
+
+    MINUSE_INDICATOR: Minus indicator
+
+<p align="center" >
+<img src="https://raw.github.com/bitmapdata/MSCellAccessory/master/MSCellAccessoryDemo/ScreenShot3.png">
+</p>
 <p align="center" >
 <img src="https://raw.github.com/bitmapdata/MSCellAccessory/master/MSCellAccessoryDemo/ScreenShot2.png">
 </p>
