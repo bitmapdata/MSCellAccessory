@@ -55,13 +55,13 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     
     cell.textLabel.font = [UIFont systemFontOfSize:10.0];
-    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DETAIL_DISCLOSURE];
+    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_PLUS_INDICATOR];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DETAIL_BUTTON];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DISCLOSURE_INDICATOR];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_CHECKMARK];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_UNFOLD_INDICATOR];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_FOLD_INDICATOR];
-//    [self configureCell:cell indexPath:indexPath accessoryType:DETAIL_DISCLOSURE];
+//    [self configureCell:cell indexPath:indexPath accessoryType:MSCellAccessoryTypeDetailDisclosure];
 //    [self configureCell:cell indexPath:indexPath accessoryType:DISCLOSURE_INDICATOR];
 //    [self configureCell:cell indexPath:indexPath accessoryType:CHECKMARK];
 //    [self configureCell:cell indexPath:indexPath accessoryType:UNFOLD_INDICATOR];
@@ -70,7 +70,7 @@
     return cell;
 }
 
-- (void)configureCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath accessoryType:(AccessoryType )accessoryType
+- (void)configureCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath accessoryType:(MSCellAccessoryType )accessoryType
 {
     if(accessoryType == FLAT_DETAIL_DISCLOSURE)
     {
@@ -127,7 +127,7 @@
         }
         else if(indexPath.row == 1)
         {
-            cell.accessoryView = [MSCellAccessory accessoryWithType:accessoryType color:[UIColor colorWithRed:208/255.0 green:44/255.0 blue:55/255.0 alpha:1.0]];
+            cell.accessoryView = [MSCellAccessory accessoryWithType:accessoryType color:[UIColor colorWithRed:255/255.0 green:59/255.0 blue:48/255.0 alpha:1.0]];
         }
         else if(indexPath.row == 2)
         {
@@ -143,7 +143,7 @@
         }
         else if(indexPath.row == 5)
         {
-            cell.accessoryView = [MSCellAccessory accessoryWithType:accessoryType color:[UIColor colorWithRed:140/255.0 green:255/255.0 blue:39/255.0 alpha:1.0]];
+            cell.accessoryView = [MSCellAccessory accessoryWithType:accessoryType color:[UIColor colorWithRed:76/255.0 green:217/255.0 blue:100/255.0 alpha:1.0]];
         }
         else if(indexPath.row == 6)
         {
@@ -190,9 +190,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    /*
     if(indexPath.row == _selectedIndex.row)
         return 100;
-
+     */
+    
     return tableView.rowHeight;
 }
 
