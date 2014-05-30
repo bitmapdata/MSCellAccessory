@@ -107,6 +107,10 @@ These classes was written under the ARC. Be sure to specify `-fobjc-arc` the 'Co
 
 ## Release notes ###
 
+####    Ver 1.1.3
+* Rename AccessoryType to MSCellAccessoryType
+* Add FLAT_PLUS_INDICATOR, FLAT_MINUS_INDICATOR, PLUS_INDICATOR, MINUS_INDICATOR
+
 ####    Ver 1.1.2
 * Discontinued TOGGLE_INDICATOR and change to UNFOLD_INDICATOR, FOLD_INDICATOR. flat also changed.
 * Solved what if you change a UITableViewCell height, accessoryView this will affect change the right margin. ( #issue prior to iOS7 )
