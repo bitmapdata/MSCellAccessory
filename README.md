@@ -39,7 +39,7 @@ MSCellAccessory is a UITableViewCell accessoryType can easily customizing the co
 
     PLUS_INDICATOR: Plus indicator
 
-    MINUSE_INDICATOR: Minus indicator
+    MINUS_INDICATOR: Minus indicator
 
 <p align="center" >
 <img src="https://raw.github.com/bitmapdata/MSCellAccessory/master/MSCellAccessoryDemo/ScreenShot3.png">
