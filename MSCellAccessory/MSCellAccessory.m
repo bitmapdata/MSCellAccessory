@@ -242,12 +242,12 @@
     //iOS5, iOS6
     if(![NSClassFromString(@"UIMotionEffect") class])
     {
-        UITableView *tb = (UITableView *)self.superview.superview;
-        
-        if(tb.style == UITableViewStylePlain)
-        {
+        BOOL isTableView = [self.superview.superview isKindOfClass:[UITableView class]];
+        UITableView *tb = (UITableView *) self.superview.superview;
+
+        if (isTableView && tb.style == UITableViewStylePlain) {
             CGRect frame = self.frame;
-            if(_accType != FLAT_DETAIL_DISCLOSURE)
+            if (_accType != FLAT_DETAIL_DISCLOSURE)
                 frame.origin.x = kFixedPositionX;
             else
                 frame.origin.x = kFlatDetailFixedPositionX;
@@ -258,32 +258,32 @@
 
 - (void)accessoryButtonTapped:(id)sender event:(UIEvent *)event
 {
-    UITableView *superTableView = NULL;
-    UITableViewController *superController = NULL;
-    UITableViewCell *superTableViewCell = NULL;
-    NSIndexPath *indexPath = NULL;
-    //iOS7 above
-    if([NSClassFromString(@"UIMotionEffect") class])
-    {
-        superTableView = (UITableView *)self.superview.superview.superview.superview;
-        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
-        superTableViewCell = (UITableViewCell *)self.superview.superview;
-        indexPath = [superTableView indexPathForCell:superTableViewCell];
-    }
-    //iOS5, iOS6
-    else
-    {
-        superTableView = (UITableView *)self.superview.superview;
-        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
-        superTableViewCell = (UITableViewCell *)self.superview;
-        indexPath = [superTableView indexPathForCell:superTableViewCell];
-    }
-    
-    if ([superController respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
-        [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
-    }
-    else {
-        NSAssert(0, @"superController must implement tableView:accessoryButtonTappedForRowWithIndexPath:");
+    if ([self.superview.superview isKindOfClass:[UITableView class]]) {
+        UITableView *superTableView = NULL;
+        UITableViewController *superController = NULL;
+        UITableViewCell *superTableViewCell = NULL;
+        NSIndexPath *indexPath = NULL;
+        //iOS7 above
+        if ([NSClassFromString(@"UIMotionEffect") class]) {
+            superTableView = (UITableView *) self.superview.superview.superview.superview;
+            superController = (UITableViewController *) superTableView.firstAvailableUIViewController;
+            superTableViewCell = (UITableViewCell *) self.superview.superview;
+            indexPath = [superTableView indexPathForCell:superTableViewCell];
+        }
+            //iOS5, iOS6
+        else {
+            superTableView = (UITableView *) self.superview.superview;
+            superController = (UITableViewController *) superTableView.firstAvailableUIViewController;
+            superTableViewCell = (UITableViewCell *) self.superview;
+            indexPath = [superTableView indexPathForCell:superTableViewCell];
+        }
+
+        if ([superController respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
+            [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
+        }
+        else {
+            NSAssert(0, @"superController must implement tableView:accessoryButtonTappedForRowWithIndexPath:");
+        }
     }
 }
 
@@ -794,9 +794,10 @@
     //iOS5, iOS6
     if(![NSClassFromString(@"UIMotionEffect") class])
     {
+        BOOL isTableView = [self.superview.superview isKindOfClass:[UITableView class]];
         UITableView *tb = (UITableView *)self.superview.superview;
         
-        if(tb.style == UITableViewStylePlain)
+        if(isTableView && tb.style == UITableViewStylePlain)
         {
             CGRect frame = self.frame;
             if(_accType != FLAT_DETAIL_DISCLOSURE)
