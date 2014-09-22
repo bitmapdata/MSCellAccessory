@@ -259,14 +259,14 @@
 - (void)accessoryButtonTapped:(id)sender event:(UIEvent *)event
 {
     UITableView *superTableView = NULL;
-    UITableViewController *superController = NULL;
+    id<UITableViewDelegate> tableDelegate = NULL;
     UITableViewCell *superTableViewCell = NULL;
     NSIndexPath *indexPath = NULL;
     //iOS7 above
     if([NSClassFromString(@"UIMotionEffect") class])
     {
         superTableView = (UITableView *)self.superview.superview.superview.superview;
-        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
+        tableDelegate = superTableView.delegate;
         superTableViewCell = (UITableViewCell *)self.superview.superview;
         indexPath = [superTableView indexPathForCell:superTableViewCell];
     }
@@ -274,13 +274,13 @@
     else
     {
         superTableView = (UITableView *)self.superview.superview;
-        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
+        tableDelegate = superTableView.delegate;
         superTableViewCell = (UITableViewCell *)self.superview;
         indexPath = [superTableView indexPathForCell:superTableViewCell];
     }
     
-    if ([superController respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
-        [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
+    if ([tableDelegate respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
+        [tableDelegate tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
     }
     else {
         NSAssert(0, @"superController must implement tableView:accessoryButtonTappedForRowWithIndexPath:");
