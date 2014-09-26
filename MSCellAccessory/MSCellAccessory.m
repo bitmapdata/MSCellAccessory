@@ -259,28 +259,24 @@
 - (void)accessoryButtonTapped:(id)sender event:(UIEvent *)event
 {
     UITableView *superTableView = NULL;
-    UITableViewController *superController = NULL;
+    id<UITableViewDelegate> tableDelegate = NULL;
     UITableViewCell *superTableViewCell = NULL;
     NSIndexPath *indexPath = NULL;
-    //iOS7 above
-    if([NSClassFromString(@"UIMotionEffect") class])
-    {
-        superTableView = (UITableView *)self.superview.superview.superview.superview;
-        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
-        superTableViewCell = (UITableViewCell *)self.superview.superview;
-        indexPath = [superTableView indexPathForCell:superTableViewCell];
-    }
-    //iOS5, iOS6
-    else
-    {
-        superTableView = (UITableView *)self.superview.superview;
-        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
-        superTableViewCell = (UITableViewCell *)self.superview;
-        indexPath = [superTableView indexPathForCell:superTableViewCell];
-    }
     
-    if ([superController respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
-        [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
+    superTableView = (UITableView *)self.superview;
+    while (![superTableView isKindOfClass:[UITableView class]]) {
+        superTableView = (UITableView *)superTableView.superview;
+    }
+    tableDelegate = superTableView.delegate;
+    
+    superTableViewCell = (UITableViewCell *)self.superview;
+    while (![superTableViewCell isKindOfClass:[UITableViewCell class]]) {
+        superTableViewCell = (UITableViewCell *)superTableViewCell.superview;
+    }
+    indexPath = [superTableView indexPathForCell:superTableViewCell];
+    
+    if ([tableDelegate respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
+        [tableDelegate tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
     }
     else {
         NSAssert(0, @"superController must implement tableView:accessoryButtonTappedForRowWithIndexPath:");

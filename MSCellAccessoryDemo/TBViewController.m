@@ -55,8 +55,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     
     cell.textLabel.font = [UIFont systemFontOfSize:10.0];
-    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_PLUS_INDICATOR];
-//    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DETAIL_BUTTON];
+//    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_PLUS_INDICATOR];
+    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DETAIL_BUTTON];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_DISCLOSURE_INDICATOR];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_CHECKMARK];
 //    [self configureCell:cell indexPath:indexPath accessoryType:FLAT_UNFOLD_INDICATOR];
