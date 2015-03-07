@@ -81,6 +81,7 @@
 
 typedef NS_ENUM(NSInteger, MSCellAccessoryType)
 {
+    NONE,
     DETAIL_DISCLOSURE,
     DISCLOSURE_INDICATOR,
     CHECKMARK,
