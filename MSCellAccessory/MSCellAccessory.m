@@ -155,6 +155,7 @@
         self.accessoryColor = color;
         self.accType = accessoryType;
         self.isAutoLayout = YES;
+        self.isAccessoryViewUserInteractionEnabled = NO;
         
         if(!highlightedColor)
         {
@@ -197,11 +198,11 @@
             self.highlightedColor = highlightedColor;
         }
         
-        self.userInteractionEnabled = NO;
         if(_accType == DETAIL_DISCLOSURE || _accType == FLAT_DETAIL_BUTTON)
         {
-            [self addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
-            self.userInteractionEnabled = YES;
+            [self setIsAccessoryViewUserInteractionEnabled:YES];
+        }else {
+            [self setIsAccessoryViewUserInteractionEnabled:NO];
         }
     }
     
@@ -838,6 +839,24 @@
 	}
     
 	return _highlightedColor;
+}
+
+#pragma mark - Accessory View User Interaction
+
+-(void)setIsAccessoryViewUserInteractionEnabled:(BOOL)isAccessoryViewUserInteractionEnabled
+{
+    if (_isAccessoryViewUserInteractionEnabled != isAccessoryViewUserInteractionEnabled) {
+        
+        _isAccessoryViewUserInteractionEnabled = isAccessoryViewUserInteractionEnabled;
+        
+        if (_isAccessoryViewUserInteractionEnabled) {
+            [self addTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
+            self.userInteractionEnabled = YES;
+        }else {
+            [self removeTarget:self action:@selector(accessoryButtonTapped:event:) forControlEvents:UIControlEventTouchUpInside];
+            self.userInteractionEnabled = NO;
+        }
+    }
 }
 
 @end
