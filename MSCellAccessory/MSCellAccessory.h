@@ -102,6 +102,7 @@ typedef NS_ENUM(NSInteger, MSCellAccessoryType)
 @interface MSCellAccessory : UIControl
 @property (nonatomic, assign) MSCellAccessoryType accType;
 @property (nonatomic, assign) BOOL isAutoLayout; //default is YES. if set to NO, accessory layout does not adjust automatically.
+@property (nonatomic, assign) BOOL isAccessoryViewUserInteractionEnabled; //couples accessory view icon user interaction with the control
 
 + (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType color:(UIColor *)color;
 + (MSCellAccessory *)accessoryWithType:(MSCellAccessoryType)accessoryType color:(UIColor *)color highlightedColor:(UIColor *)highlightedColor;
