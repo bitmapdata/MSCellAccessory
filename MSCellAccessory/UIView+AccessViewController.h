@@ -44,4 +44,8 @@
 // http://stackoverflow.com/questions/1340434/get-to-uiviewcontroller-from-uiview-on-iphone
 - (UIViewController *)firstAvailableUIViewController;
 - (id) traverseResponderChainForUIViewController;
+
+- (UITableView *)ms_firstTableViewHierarchyFromView:(UIView *)view;
+- (UITableViewCell *)ms_firstTableViewCellInHierarchyFromView:(UIView *)view;
+
 @end

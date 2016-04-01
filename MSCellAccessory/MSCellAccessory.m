@@ -226,8 +226,7 @@
     //iOS5, iOS6
     if(![NSClassFromString(@"UIMotionEffect") class])
     {
-        UITableView *tb = (UITableView *)self.superview.superview;
-        
+        UITableView *tb = [self ms_firstTableViewHierarchyFromView:self];
         if(tb.style == UITableViewStylePlain)
         {
             CGRect frame = self.frame;
@@ -242,31 +241,15 @@
 
 - (void)accessoryButtonTapped:(id)sender event:(UIEvent *)event
 {
-    UITableView *superTableView = NULL;
-    UITableViewController *superController = NULL;
-    UITableViewCell *superTableViewCell = NULL;
-    NSIndexPath *indexPath = NULL;
-    //iOS7 above
-    if([NSClassFromString(@"UIMotionEffect") class])
-    {
-        superTableView = (UITableView *)self.superview.superview.superview.superview;
-        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
-        superTableViewCell = (UITableViewCell *)self.superview.superview;
-        indexPath = [superTableView indexPathForCell:superTableViewCell];
-    }
-    //iOS5, iOS6
-    else
-    {
-        superTableView = (UITableView *)self.superview.superview;
-        superController = (UITableViewController *)superTableView.firstAvailableUIViewController;
-        superTableViewCell = (UITableViewCell *)self.superview;
-        indexPath = [superTableView indexPathForCell:superTableViewCell];
-    }
+    UITableView *superTableView = [self ms_firstTableViewHierarchyFromView:self];
+    UITableViewController *superController = (UITableViewController *)superTableView.firstAvailableUIViewController;;
+    UITableViewCell *superTableViewCell = [self ms_firstTableViewCellInHierarchyFromView:self];;
+    NSIndexPath *indexPath = [superTableView indexPathForCell:superTableViewCell];
     
     if ([superController respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
         [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
-    }
-    else {
+        
+    }  else {
         NSAssert(0, @"superController must implement tableView:accessoryButtonTappedForRowWithIndexPath:");
     }
 }
@@ -586,8 +569,7 @@
     //iOS5, iOS6
     if(![NSClassFromString(@"UIMotionEffect") class])
     {
-        UITableView *tb = (UITableView *)self.superview.superview;
-        
+        UITableView *tb = [self ms_firstTableViewHierarchyFromView:self];
         if(tb.style == UITableViewStylePlain)
         {
             CGRect frame = self.frame;
