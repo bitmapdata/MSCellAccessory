@@ -42,6 +42,6 @@
 - (UIViewController *)viewController DEPRECATED_ATTRIBUTE;
 // Thanks to Phil M
 // http://stackoverflow.com/questions/1340434/get-to-uiviewcontroller-from-uiview-on-iphone
-- (UIViewController *)firstAvailableUIViewController;
-- (id) traverseResponderChainForUIViewController;
+- (UIViewController *)ms_firstAvailableUIViewController;
+- (id)ms_traverseResponderChainForUIViewController;
 @end

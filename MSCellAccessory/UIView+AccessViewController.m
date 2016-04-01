@@ -18,17 +18,17 @@
         return nil;
     }
 }
-- (UIViewController *)firstAvailableUIViewController {
+- (UIViewController *)ms_firstAvailableUIViewController {
     // convenience function for casting and to "mask" the recursive function
-    return (UIViewController *)[self traverseResponderChainForUIViewController];
+    return (UIViewController *)[self ms_traverseResponderChainForUIViewController];
 }
 
-- (id)traverseResponderChainForUIViewController {
+- (id)ms_traverseResponderChainForUIViewController {
     id nextResponder = [self nextResponder];
     if ([nextResponder isKindOfClass:[UIViewController class]]) {
         return nextResponder;
     } else if ([nextResponder isKindOfClass:[UIView class]]) {
-        return [nextResponder traverseResponderChainForUIViewController];
+        return [nextResponder ms_traverseResponderChainForUIViewController];
     } else {
         return nil;
     }
