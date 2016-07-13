@@ -259,7 +259,7 @@
 - (void)accessoryButtonTapped:(id)sender event:(UIEvent *)event
 {
     UITableView *superTableView = [self ms_firstTableViewHierarchyFromView:self];
-    UITableViewController *superController = (UITableViewController *)superTableView.firstAvailableUIViewController;;
+    UITableViewController *superController = (UITableViewController *)superTableView.ms_firstAvailableUIViewController;;
     UITableViewCell *superTableViewCell = [self ms_firstTableViewCellInHierarchyFromView:self];;
     NSIndexPath *indexPath = [superTableView indexPathForCell:superTableViewCell];
     
