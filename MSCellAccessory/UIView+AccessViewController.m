@@ -33,4 +33,31 @@
         return nil;
     }
 }
+
+- (UITableView *)ms_firstTableViewHierarchyFromView:(UIView *)view
+{
+    UIView *superView = view;
+    while (superView.superview) {
+        if ([superView.superview isKindOfClass:UITableView.class]) {
+            return (UITableView *)superView.superview;
+        }
+        superView = superView.superview;
+    }
+    
+    return nil;
+}
+
+- (UITableViewCell *)ms_firstTableViewCellInHierarchyFromView:(UIView *)view
+{
+    UIView *superView = view;
+    while (superView.superview) {
+        if ([superView.superview isKindOfClass:UITableViewCell.class]) {
+            return (UITableViewCell *)superView.superview;
+        }
+        superView = superView.superview;
+    }
+    
+    return nil;
+}
+
 @end
