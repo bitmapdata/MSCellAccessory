@@ -40,9 +40,6 @@
 
 @interface UIView (AccessViewController)
 - (UIViewController *)viewController DEPRECATED_ATTRIBUTE;
-// Thanks to Phil M
-// http://stackoverflow.com/questions/1340434/get-to-uiviewcontroller-from-uiview-on-iphone
-- (UIViewController *)ms_firstAvailableUIViewController;
 - (id)ms_traverseResponderChainForUIViewController;
 - (UITableView *)ms_firstTableViewHierarchyFromView:(UIView *)view;
 - (UITableViewCell *)ms_firstTableViewCellInHierarchyFromView:(UIView *)view;

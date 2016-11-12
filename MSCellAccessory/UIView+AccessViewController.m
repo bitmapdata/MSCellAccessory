@@ -18,10 +18,6 @@
         return nil;
     }
 }
-- (UIViewController *)ms_firstAvailableUIViewController {
-    // convenience function for casting and to "mask" the recursive function
-    return (UIViewController *)[self ms_traverseResponderChainForUIViewController];
-}
 
 - (id)ms_traverseResponderChainForUIViewController {
     id nextResponder = [self nextResponder];
