@@ -259,14 +259,14 @@
 - (void)accessoryButtonTapped:(id)sender event:(UIEvent *)event
 {
     UITableView *superTableView = [self ms_firstTableViewHierarchyFromView:self];
-    UITableViewController *superController = (UITableViewController *)superTableView.ms_firstAvailableUIViewController;;
+    id<UITableViewDelegate> tableDelegate = superTableView.delegate;
     UITableViewCell *superTableViewCell = [self ms_firstTableViewCellInHierarchyFromView:self];;
     NSIndexPath *indexPath = [superTableView indexPathForCell:superTableViewCell];
     
-    if ([superController respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
-        [superController tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
+    if ([tableDelegate respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)]) {
+        [tableDelegate tableView:superTableView accessoryButtonTappedForRowWithIndexPath:indexPath];
     } else {
-        NSAssert(0, @"superController must implement tableView:accessoryButtonTappedForRowWithIndexPath:");
+        NSAssert(0, @"superTableView.delegate must implement tableView:accessoryButtonTappedForRowWithIndexPath:");
     }
 }
 
